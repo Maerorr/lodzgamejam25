@@ -11,11 +11,20 @@ public class HealConsumables : MonoBehaviour
     {
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            availableHeals--;
+            SetAvailableHeals(availableHeals);
+        }
+    }
+
     public void SetAvailableHeals(int count)
     {
         for (int i = 0; i < images.Count; i++)
         {
-            images[i].color = i < count ? Color.white : new Color(1, 1, 1, 0.1f);
+            images[i].color = i < count ? Color.white : new Color(1, 1, 1, 0.0f);
         }
     }
 }
