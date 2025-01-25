@@ -2,37 +2,50 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] HealConsumables healConsumables;
+    //[SerializeField] HealConsumables healConsumables;
     [SerializeField] PlayerHealthBar healthBar;
-
+    [SerializeField] float healthDecreaseMultiplier = 1.0f;
 
     public float playerHealth = 100f;
-    public int lifeCharges = 3;
-    private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
+    
+    //public int lifeCharges = 3;
+    //private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
     private Soda soda;
     public Rigidbody2D rb;
     public float knockbackValue;
+    [SerializeField] Vector3 respawnPosition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         soda = GetComponent<Soda>();
 
+        /*
         if(healConsumables)
         {
             healConsumables.SetAvailableHeals(lifeCharges);
         }
-        
+        */
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(healthBar)
+
+        playerHealth -= healthDecreaseMultiplier * Time.deltaTime;
+        if(playerHealth <= 0.0f)
         {
-            healthBar.SetCurrentHealth(playerHealth);
+            Die();
         }
-        CheckForCheckpoint();
+
+        if(healthBar)
+        {   
+            
+            healthBar.SetCurrentHealth(Mathf.InverseLerp(0f,100f, playerHealth));
+        }
+
+        //CheckForCheckpoint();
+
         if (Input.GetMouseButton(0))
         {
             soda.isEmitting = true;
@@ -44,11 +57,13 @@ public class Player : MonoBehaviour
             soda.isEmitting = false;
         }
 
+        /*
         if (Input.GetMouseButtonDown(1))
         {
            
             UseCharge();
         }
+        */
 
         if(soda.isKnockback)
         {
@@ -77,10 +92,11 @@ public class Player : MonoBehaviour
 
     void Die()
     {
-        transform.position = latestCheckpoint;
-        Debug.Log(transform.position);
+        transform.position = respawnPosition;
+        playerHealth = 100.0f;
     }
 
+    /*
     void CheckForCheckpoint()
     {
         RaycastHit2D hit = Physics2D.BoxCast(transform.position, new Vector2(10.0f, 10.0f), 0.0f, transform.forward, 100.0f, LayerMask.GetMask("Checkpoint"));
@@ -94,6 +110,7 @@ public class Player : MonoBehaviour
         }
 
     }
+    
 
     void SetLatestCheckpoint(Vector3 position)
     {
@@ -127,4 +144,5 @@ public class Player : MonoBehaviour
             
         }
     }
+    */
 }

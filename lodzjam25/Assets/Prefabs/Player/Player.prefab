@@ -151,12 +151,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c90c62f4d756040a8ac2ec34873120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healConsumables: {fileID: 0}
   healthBar: {fileID: 0}
+  healthDecreaseMultiplier: 1
   playerHealth: 100
-  lifeCharges: 3
   rb: {fileID: 3576634476131632788}
   knockbackValue: 20
+  respawnPosition: {x: 0, y: 0, z: 0}
 --- !u!70 &5213826443888902026
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
