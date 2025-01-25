@@ -3,15 +3,22 @@ using UnityEngine;
 public class Soda : MonoBehaviour
 {
 	Vector2 previous;
+	[SerializeField] TrzepoMeter trzepoMeter;
 	[SerializeField] float pressure; //0-1
-	[SerializeField] float losingPressureInterval = 0.1f;
-	[SerializeField] float addedPressureMultiplier = 0.25f;
+	[SerializeField] float losingPressureInterval = 0.005f;
+	[SerializeField] float timeBetweenLoss = 0.1f;
+	[SerializeField] float timeBeforeFirstLoss = 2.0f;
+	[SerializeField] float addedPressureMultiplier = 0.01f;
 	float minDist = 150.0f;
 	float maxDist = 300.0f;
 
 	float timeAtLastShake;
 	float timeSinceLastShake;
-	[SerializeField] float timeBetweenLoss = 2.0f;
+
+	float timeAtPreviousLoss;
+	float timeSincePreviousLoss;
+
+	bool isPressureFalling = false;
 
     float currentSpawnTimer;
     public float spawnTimer;
@@ -29,35 +36,36 @@ public class Soda : MonoBehaviour
 	{
         currentSpawnTimer = spawnTimer;
         previous = ReadMouse();
+		timeAtPreviousLoss = Time.time;
 	}
 
     public void Emit()
     {
         if (currentSpawnTimer < 0)
         {
-            // Pozycja myszy w uk³adzie ekranu
+            // Pozycja myszy w ukï¿½adzie ekranu
             Vector3 mouseScreenPosition = Input.mousePosition;
 
-            // Zamiana pozycji myszy na wspó³rzêdne œwiata (tylko dla X i Y)
+            // Zamiana pozycji myszy na wspï¿½rzï¿½dne ï¿½wiata (tylko dla X i Y)
             Camera mainCamera = Camera.main;
 			Vector3 mouseWorldPosition = new Vector2(mouseScreenPosition.x, mouseScreenPosition.y);
 			mouseWorldPosition.z = 0;
-            // Pozycja obiektu w œwiecie (tylko dla X i Y)
+            // Pozycja obiektu w ï¿½wiecie (tylko dla X i Y)
             Vector3 objectPosition = mainCamera.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y, 0)); 
 
-            // Obliczenie kierunku (z obiektu do myszy, tylko w p³aszczyŸnie X i Y)
+            // Obliczenie kierunku (z obiektu do myszy, tylko w pï¿½aszczyï¿½nie X i Y)
             Vector3 direction = (mouseWorldPosition - objectPosition);
-            direction.z = 0; // Upewniamy siê, ¿e ignorujemy wspó³rzêdn¹ Z
+            direction.z = 0; // Upewniamy siï¿½, ï¿½e ignorujemy wspï¿½rzï¿½dnï¿½ Z
             direction.Normalize();
 
-            // Obliczenie k¹ta obrotu wzglêdem osi Z
+            // Obliczenie kï¿½ta obrotu wzglï¿½dem osi Z
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            // Instancjonowanie prefaba z rotacj¹ zgodn¹ z k¹tem
+            // Instancjonowanie prefaba z rotacjï¿½ zgodnï¿½ z kï¿½tem
             GameObject instance = Instantiate(
                 prefab,
-                new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p³aszczyŸnie X, Y
-                Quaternion.Euler(0, 0, angle) // Rotacja tylko wokó³ osi Z
+                new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w pï¿½aszczyï¿½nie X, Y
+                Quaternion.Euler(0, 0, angle) // Rotacja tylko wokï¿½ osi Z
             );
 
             // Przekazanie kierunku do prefab movement (tylko X i Y)
@@ -68,7 +76,7 @@ public class Soda : MonoBehaviour
             
         }
 
-        // Odliczanie czasu do nastêpnego emitowania
+        // Odliczanie czasu do nastï¿½pnego emitowania
         currentSpawnTimer -= Time.deltaTime;
     }
 
@@ -111,7 +119,19 @@ public class Soda : MonoBehaviour
 			}
 		}
 
-		if(timeSinceLastShake >= timeBetweenLoss)
+		//check if some time since last shake passed
+		if(timeSinceLastShake >= timeBeforeFirstLoss)
+		{
+			isPressureFalling = true;
+		}
+		else
+		{
+			isPressureFalling = false;
+		}
+
+
+		timeSincePreviousLoss = Time.time - timeAtPreviousLoss;
+		if(timeSincePreviousLoss >= timeBetweenLoss && isPressureFalling == true)
 		{
 
 			if(pressure >= losingPressureInterval)
@@ -124,8 +144,8 @@ public class Soda : MonoBehaviour
 			}
 
 			//zerujemy zeby znowu minely 2 sekundy przed kolejnym spadkiem pressure
-			timeSinceLastShake = 0.0f;
-			timeAtLastShake = Time.time;
+			timeSincePreviousLoss = 0.0f;
+			timeAtPreviousLoss = Time.time;
 		}
 
 		// how long in seconds was the last frame?
@@ -134,6 +154,10 @@ public class Soda : MonoBehaviour
 		// compute!
 		float pixelsPerSecond = distance / timeDelta;
 
+		if(trzepoMeter)
+		{
+			trzepoMeter.SetPressure(pressure);
+		}
 		// and report!
 		//Debug.Log( System.String.Format( "Speed is {0:000.0} pixels / second.", pixelsPerSecond));
 

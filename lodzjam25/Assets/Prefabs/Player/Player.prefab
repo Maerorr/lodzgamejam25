@@ -104,12 +104,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b705f2217c12954487b977feb2f5ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  jumpForce: 100
-  gravity: -20
+  moveSpeed: 4.43
+  jumpForce: 8.8
+  gravity: -9.81
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   isGrounded: 0
   isJumping: 0
 --- !u!50 &3576634476131632788
@@ -120,7 +120,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7617039352615937584}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
@@ -138,7 +138,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &8743473596099030541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c90c62f4d756040a8ac2ec34873120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healConsumables: {fileID: 0}
+  healthBar: {fileID: 0}
   playerHealth: 100
   lifeCharges: 3
 --- !u!70 &5213826443888902026
@@ -202,10 +204,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c443c8d4a8bc840b6d3c6e255e7b3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trzepoMeter: {fileID: 0}
   pressure: 0
-  losingPressureInterval: 0.1
-  addedPressureMultiplier: 0.25
-  timeBetweenLoss: 2
+  losingPressureInterval: 0.005
+  timeBetweenLoss: 0.1
+  timeBeforeFirstLoss: 2
+  addedPressureMultiplier: 0.01
   spawnTimer: 0.001
   prefab: {fileID: 8568493787205071013, guid: d971b66e484ee5645898ecda45492028, type: 3}
 --- !u!114 &-6449057945213229833

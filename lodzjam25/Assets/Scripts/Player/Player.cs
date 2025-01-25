@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] HealConsumables healConsumables;
+    [SerializeField] PlayerHealthBar healthBar;
+
+
     public float playerHealth = 100f;
     public int lifeCharges = 3;
     private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
@@ -11,11 +15,22 @@ public class Player : MonoBehaviour
     void Start()
     {
         soda = GetComponent<Soda>();
+
+        if(healConsumables)
+        {
+            healConsumables.SetAvailableHeals(lifeCharges);
+        }
+        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(healthBar)
+        {
+            healthBar.SetCurrentHealth(playerHealth);
+        }
         CheckForCheckpoint();
         if (Input.GetMouseButton(0))
         {
@@ -23,11 +38,23 @@ public class Player : MonoBehaviour
             soda.Emit();
         }
 
+        if (Input.GetMouseButtonDown(1))
+        {
+           
+            UseCharge();
+        }
+
     }
 
     void DecreaseHealth(float damage)
     {
         playerHealth -= damage;
+
+        if(healthBar)
+        {
+            healthBar.SetCurrentHealth(playerHealth);
+        }
+
         if(playerHealth <= 0.0f)
         {
             Die();
@@ -78,6 +105,10 @@ public class Player : MonoBehaviour
     void GetLifeCharges()
     {
         lifeCharges = 3;
+        if(healConsumables)
+        {
+            healConsumables.SetAvailableHeals(lifeCharges);
+        }
     }
 
     void UseCharge()
@@ -85,7 +116,17 @@ public class Player : MonoBehaviour
         if(lifeCharges > 0)
         {
             playerHealth = 100.0f;
+            if(healthBar)
+            {
+                healthBar.SetCurrentHealth(playerHealth);
+            }
+
             lifeCharges -= 1;
+            if(healConsumables)
+            {
+                healConsumables.SetAvailableHeals(lifeCharges);
+            }
+            
         }
     }
 }
