@@ -108,7 +108,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
         
         if (direction.x * attentionDistace > distance || -direction.x * attentionDistace * backAttentionMultiply > distance)
         {
-            Debug.Log("kurwa");
+            
             sawPlayer = true;
             if (transform.position.x > player.transform.position.x)
             {
