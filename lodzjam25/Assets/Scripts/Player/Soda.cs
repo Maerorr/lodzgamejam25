@@ -11,8 +11,8 @@ public class Soda : MonoBehaviour
 	[SerializeField] float timeBetweenLossEm = 0.08f;
 	[SerializeField] float timeBeforeFirstLoss = 2.0f;
 	[SerializeField] float addedPressureMultiplier = 0.01f;
-	float minDist = 150.0f;
-	float maxDist = 300.0f;
+	[SerializeField] float minDist = 20.0f;
+	[SerializeField] float maxDist = 300.0f;
 
 	float timeAtLastShake;
 	float timeSinceLastShake;

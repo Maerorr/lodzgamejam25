@@ -208,12 +208,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trzepoMeter: {fileID: 0}
   pressure: 1
-  losingPressureInterval: 0
+  losingPressureInterval: 0.005
   timeBetweenLoss: 0.1
-  losingPressureIntervalEm: 0.005
+  losingPressureIntervalEm: 0.01
   timeBetweenLossEm: 0.08
   timeBeforeFirstLoss: 2
   addedPressureMultiplier: 0.01
+  minDist: 20
+  maxDist: 300
   spawnTimer: 0.001
   prefab: {fileID: 8568493787205071013, guid: d971b66e484ee5645898ecda45492028, type: 3}
   isEmitting: 0
