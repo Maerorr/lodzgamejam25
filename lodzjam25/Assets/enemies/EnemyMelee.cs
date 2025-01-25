@@ -10,9 +10,10 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     bool sawPlayer = false;
 
     Behaviour currentBehaviour;
-
+    bool takeDamage = false;
     public float basicLifeTime;
     public float lifeTimeToDeath;
+    public float currentLifeTimeToDeath;
     public float attackRange;
     public float attackSpeed;
     public float speed;
@@ -20,9 +21,9 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     public float attackRangeOffset;
     public float attentionDistace;
     public Player player;
-    Vector2 direction;
+    public Vector2 direction;
     float backAttentionMultiply = 0.2f;
-
+    public bool isTarczaSzmato= true;
     Vector3 positionInit;
     public float patrolDistance;
     Vector2 patrolRange;
@@ -31,7 +32,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     public float timeToRotate;
     float currentTimeToRotate;
     //
-
+    public LayerMask layerMask; // Zmienna, do której przypiszesz warstwy w inspektorze
     bool attackTrigger;
     float currentAttackTrigger;
 
@@ -133,6 +134,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
         patrolRange = new Vector2(positionInit.x - patrolDistance, positionInit.x + patrolDistance);
         direction = new Vector2(1.0f, 0.0f);
         currentTimeToRotate = timeToRotate;
+        currentLifeTimeToDeath = lifeTimeToDeath;
         this.currentBehaviour = new Stay();
     }
 
@@ -140,7 +142,12 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     void Update()
     {
 
-
+        if (takeDamage)
+        {
+            takeDamage = false;
+            currentLifeTimeToDeath -= Time.deltaTime;
+        }
+        if(transform.position.y <0) transform.position = new Vector3 (transform.position.x, 0, transform.position.z);    
         setCurrentState();
         currentBehaviour.execute(this);
     }
@@ -152,14 +159,22 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
 
     public void death()
     {
-        Object.Destroy(this);
+
+        Destroy(gameObject);
 
     }
 
     public void setCurrentState()
     {
+        if (currentLifeTimeToDeath < 0)
+        {
+            
+            currentBehaviour = new Death();
+            return;
+        }
         if (sawPlayer)
         {
+            
             Vector3 bufor = new Vector3(this.transform.position.x + direction.x * attackRange, this.transform.position.y,this.transform.position.z);
             float distance = Vector3.Magnitude(player.transform.position - bufor);
             if (attackRange > distance)
@@ -184,6 +199,20 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
 
 
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (((1 << other.gameObject.layer) & layerMask) != 0)
+        {
+          
+            takeDamage = true;
+        }
+        
+    }
+    
+    
+  
+
     void OnDrawGizmos()
     {
          // Draw a yellow sphere at the transform's position

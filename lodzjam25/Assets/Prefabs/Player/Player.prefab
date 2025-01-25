@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8743473596099030541}
   - component: {fileID: 5213826443888902026}
   - component: {fileID: 5614024625257270396}
+  - component: {fileID: -6449057945213229833}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -201,3 +202,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c443c8d4a8bc840b6d3c6e255e7b3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pressure: 0
+  losingPressureInterval: 0.1
+  addedPressureMultiplier: 0.25
+  timeBetweenLoss: 2
+  spawnTimer: 0.001
+  prefab: {fileID: 8568493787205071013, guid: d971b66e484ee5645898ecda45492028, type: 3}
+--- !u!114 &-6449057945213229833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7617039352615937584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8413cc4f7a8bee34aac81c2386934835, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: {x: 0, y: 0}

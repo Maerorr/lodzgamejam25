@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
         CheckForCheckpoint();
         if (Input.GetMouseButton(0))
         {
-            Debug.Log("Pressed left-click.");
+           
             soda.Emit();
         }
 

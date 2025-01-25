@@ -13,7 +13,11 @@ public class Soda : MonoBehaviour
 	float timeSinceLastShake;
 	[SerializeField] float timeBetweenLoss = 2.0f;
 
-	Vector2 ReadMouse()
+    float currentSpawnTimer;
+    public float spawnTimer;
+    public GameObject prefab;
+
+    Vector2 ReadMouse()
 	{
 		// this is the ONE place you can change if you wish to get your mouse from somewhere else
 		Vector3 rawPosition = Input.mousePosition;
@@ -23,15 +27,54 @@ public class Soda : MonoBehaviour
 
 	void Start()
 	{
-		previous = ReadMouse();
+        currentSpawnTimer = spawnTimer;
+        previous = ReadMouse();
 	}
 
-	public void Emit()
-	{
-		Debug.Log("Emit");
-	}
+    public void Emit()
+    {
+        if (currentSpawnTimer < 0)
+        {
+            // Pozycja myszy w uk³adzie ekranu
+            Vector3 mouseScreenPosition = Input.mousePosition;
 
-	void Explode()
+            // Zamiana pozycji myszy na wspó³rzêdne œwiata (tylko dla X i Y)
+            Camera mainCamera = Camera.main;
+			Vector3 mouseWorldPosition = new Vector2(mouseScreenPosition.x, mouseScreenPosition.y);
+			mouseWorldPosition.z = 0;
+            // Pozycja obiektu w œwiecie (tylko dla X i Y)
+            Vector3 objectPosition = mainCamera.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y, 0)); 
+
+            // Obliczenie kierunku (z obiektu do myszy, tylko w p³aszczyŸnie X i Y)
+            Vector3 direction = (mouseWorldPosition - objectPosition);
+            direction.z = 0; // Upewniamy siê, ¿e ignorujemy wspó³rzêdn¹ Z
+            direction.Normalize();
+
+            // Obliczenie k¹ta obrotu wzglêdem osi Z
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            // Instancjonowanie prefaba z rotacj¹ zgodn¹ z k¹tem
+            GameObject instance = Instantiate(
+                prefab,
+                new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p³aszczyŸnie X, Y
+                Quaternion.Euler(0, 0, angle) // Rotacja tylko wokó³ osi Z
+            );
+
+            // Przekazanie kierunku do prefab movement (tylko X i Y)
+            instance.GetComponent<SodaPrefabMovement>().setDirection(new Vector3(direction.x, direction.y, 0));
+
+            // Resetowanie timera
+            currentSpawnTimer = spawnTimer;
+            
+        }
+
+        // Odliczanie czasu do nastêpnego emitowania
+        currentSpawnTimer -= Time.deltaTime;
+    }
+
+
+
+    void Explode()
 	{
 		Debug.Log("Exploded! Too much pressure!");
 	}
