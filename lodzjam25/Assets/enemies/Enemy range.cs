@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Enemyrange : MonoBehaviour, EnemyBase
 {
@@ -22,12 +22,12 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     Vector3 positionInit;
     public float patrolDistance;
     Vector2 patrolRange;
-
+    public GameObject prefab;
     //
     public float timeToRotate;
     float currentTimeToRotate;
     //
-    public LayerMask layerMask; // Zmienna, do kt�rej przypiszesz warstwy w inspektorze
+    public LayerMask layerMask; // Zmienna, do której przypiszesz warstwy w inspektorze
     bool attackTrigger;
     float currentAttackTrigger;
 
@@ -150,7 +150,14 @@ public class Enemyrange : MonoBehaviour, EnemyBase
 
     public void distanceAttack()
     {
-        //create ammo
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // Instancjonowanie prefaba z rotacj� zgodn� z k�tem
+        GameObject instance = Instantiate(
+            prefab,
+            new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p�aszczy�nie X, Y
+            Quaternion.Euler(0, 0, angle) // Rotacja tylko wok� osi Z
+        );
     }
 
     public void death()
