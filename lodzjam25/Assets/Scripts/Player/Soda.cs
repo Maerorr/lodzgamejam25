@@ -4,7 +4,7 @@ public class Soda : MonoBehaviour
 {
 	Vector2 previous;
 	[SerializeField] TrzepoMeter trzepoMeter;
-	[SerializeField] float pressure; //0-1
+	[SerializeField] public float pressure; //0-1
 	[SerializeField] float losingPressureInterval = 0.005f;
 	[SerializeField] float timeBetweenLoss = 0.1f;
 	[SerializeField] float losingPressureIntervalEm = 0.05f;

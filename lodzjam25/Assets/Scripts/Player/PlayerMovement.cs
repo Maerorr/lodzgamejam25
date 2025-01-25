@@ -30,10 +30,21 @@ public class PlayerMovement : MonoBehaviour
         //rb.MovePosition(rb.position + new Vector2(horizontalInput * moveSpeed * Time.deltaTime, 0)); // Move the player horizontally
         rb.position += new Vector2(horizontalInput * moveSpeed * Time.deltaTime, 0); // Move the player horizontally
 
-        if (Input.GetButtonDown("Jump")) // Check if the player is grounded and the jump button is pressed
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, 1.3f, LayerMask.GetMask("Ground"));
+        if(hit)
+        {
+            isGrounded = true;
+        } 
+        else
+        {
+            isGrounded = false;
+        }
+
+        if (Input.GetButtonDown("Jump") && isGrounded) // Check if the player is grounded and the jump button is pressed
         {
             rb.AddForceY(jumpForce, ForceMode2D.Impulse); // Add the jump force
             isJumping = true;
+            isGrounded = false;
         }
     }
 }

@@ -1428,7 +1428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 942895452}
   - component: {fileID: 942895451}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: collider podloga
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2750,7 +2750,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1827947874}
   - component: {fileID: 1827947873}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: collider podloga (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3180,7 +3180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2029418666}
   - component: {fileID: 2029418665}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: collider podloga (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3536,7 +3536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1042017269845024507, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: moveSpeed
-      value: 3.22
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1732512023976608049, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3592,7 +3592,7 @@ PrefabInstance:
       objectReference: {fileID: 931267975}
     - target: {fileID: 8743473596099030541, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: knockbackValue
-      value: 2.83
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 8743473596099030541, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: healthDecreaseMultiplier

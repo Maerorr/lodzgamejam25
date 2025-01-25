@@ -11,14 +11,19 @@ public class Player : MonoBehaviour
     //public int lifeCharges = 3;
     //private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
     private Soda soda;
+    private PlayerMovement pm;
     public Rigidbody2D rb;
     public float knockbackValue;
     [SerializeField] Vector3 respawnPosition;
+
+    public bool canBeEmitting = false;
+    public bool isFlying = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         soda = GetComponent<Soda>();
+        pm = GetComponent<PlayerMovement>();
 
         /*
         if(healConsumables)
@@ -44,6 +49,15 @@ public class Player : MonoBehaviour
             healthBar.SetCurrentHealth(Mathf.InverseLerp(0f,100f, playerHealth));
         }
 
+        if(soda.pressure > 0.0f)
+        {
+            canBeEmitting = true;
+        } 
+        else 
+        {
+            canBeEmitting = false;
+        }
+
         //CheckForCheckpoint();
 
         if (Input.GetMouseButton(0))
@@ -55,6 +69,15 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             soda.isEmitting = false;
+        }
+
+        if(canBeEmitting && soda.isEmitting && !pm.isGrounded)
+        {
+            isFlying = true;
+        }
+        else
+        {
+            isFlying = false;
         }
 
         /*
