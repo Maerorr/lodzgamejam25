@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float playerHealth = 100f;
+    public int lifeCharges = 3;
     private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,10 +35,15 @@ public class Player : MonoBehaviour
 
     void CheckForCheckpoint()
     {
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, new Vector2(10.0f, 10.0f), 90.0f, transform.forward, LayerMask.GetMask("Checkpoint"));
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, new Vector2(10.0f, 10.0f), 0.0f, transform.forward, 100.0f, LayerMask.GetMask("Checkpoint"));
         if(hit)
         {
             SetLatestCheckpoint(hit.transform.position);
+            if(Vector3.Distance(hit.transform.position, transform.position) <= 10.0f)
+            {
+                Debug.Log("here");
+                GetLifeCharges();
+            }
         }
 
     }
@@ -61,5 +67,19 @@ public class Player : MonoBehaviour
     void SetLatestCheckpoint(Vector3 position)
     {
         latestCheckpoint = position;
+    }
+
+    void GetLifeCharges()
+    {
+        lifeCharges = 3;
+    }
+
+    void UseCharge()
+    {
+        if(lifeCharges > 0)
+        {
+            playerHealth = 100.0f;
+            lifeCharges -= 1;
+        }
     }
 }
