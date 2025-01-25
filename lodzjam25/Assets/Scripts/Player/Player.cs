@@ -34,8 +34,13 @@ public class Player : MonoBehaviour
         CheckForCheckpoint();
         if (Input.GetMouseButton(0))
         {
-           
+           soda.isEmitting = true;
             soda.Emit();
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            soda.isEmitting = false;
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -80,22 +85,6 @@ public class Player : MonoBehaviour
         }
 
     }
-
-    void OnDrawGizmos()
- {
-      // Draw a yellow sphere at the transform's position
-      //Gizmos.color = Color.yellow;
-      //Gizmos.DrawCube(new Vector2(this.transform.position.x, this.transform.position.y), new Vector3(1,1,1));
-     /*
-      Gizmos.color = Color.blue;
-      Gizmos.DrawSphere(this.transform.position + translateSphereOnHight, 2.0f);
-
-      Gizmos.color = Color.magenta;
-      Gizmos.DrawSphere(this.transform.position + new Vector3(0, -0.85f, 0), 0.1f);
-
-      Gizmos.color = Color.gray;
-      Gizmos.DrawSphere(this.transform.position + new Vector3(translateAttackCircle.x, translateAttackCircle.y, 0), 0.3f);*/
- }
 
     void SetLatestCheckpoint(Vector3 position)
     {

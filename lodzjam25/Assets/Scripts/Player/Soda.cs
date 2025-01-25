@@ -7,6 +7,8 @@ public class Soda : MonoBehaviour
 	[SerializeField] float pressure; //0-1
 	[SerializeField] float losingPressureInterval = 0.005f;
 	[SerializeField] float timeBetweenLoss = 0.1f;
+	[SerializeField] float losingPressureIntervalEm = 0.05f;
+	[SerializeField] float timeBetweenLossEm = 0.08f;
 	[SerializeField] float timeBeforeFirstLoss = 2.0f;
 	[SerializeField] float addedPressureMultiplier = 0.01f;
 	float minDist = 150.0f;
@@ -18,11 +20,16 @@ public class Soda : MonoBehaviour
 	float timeAtPreviousLoss;
 	float timeSincePreviousLoss;
 
+	float timeAtPreviousLossEm;
+	float timeSincePreviousLossEm;
+
 	bool isPressureFalling = false;
 
     float currentSpawnTimer;
     public float spawnTimer;
     public GameObject prefab;
+
+	public bool isEmitting = false;
 
     Vector2 ReadMouse()
 	{
@@ -41,43 +48,47 @@ public class Soda : MonoBehaviour
 
     public void Emit()
     {
-        if (currentSpawnTimer < 0)
-        {
-            // Pozycja myszy w uk�adzie ekranu
-            Vector3 mouseScreenPosition = Input.mousePosition;
+		if(pressure > 0.0f)
+		{
+			if (currentSpawnTimer < 0)
+			{
+				// Pozycja myszy w uk�adzie ekranu
+				Vector3 mouseScreenPosition = Input.mousePosition;
 
-            // Zamiana pozycji myszy na wsp�rz�dne �wiata (tylko dla X i Y)
-            Camera mainCamera = Camera.main;
-			Vector3 mouseWorldPosition = new Vector2(mouseScreenPosition.x, mouseScreenPosition.y);
-			mouseWorldPosition.z = 0;
-            // Pozycja obiektu w �wiecie (tylko dla X i Y)
-            Vector3 objectPosition = mainCamera.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y, 0)); 
+				// Zamiana pozycji myszy na wsp�rz�dne �wiata (tylko dla X i Y)
+				Camera mainCamera = Camera.main;
+				Vector3 mouseWorldPosition = new Vector2(mouseScreenPosition.x, mouseScreenPosition.y);
+				mouseWorldPosition.z = 0;
+				// Pozycja obiektu w �wiecie (tylko dla X i Y)
+				Vector3 objectPosition = mainCamera.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y, 0)); 
 
-            // Obliczenie kierunku (z obiektu do myszy, tylko w p�aszczy�nie X i Y)
-            Vector3 direction = (mouseWorldPosition - objectPosition);
-            direction.z = 0; // Upewniamy si�, �e ignorujemy wsp�rz�dn� Z
-            direction.Normalize();
+				// Obliczenie kierunku (z obiektu do myszy, tylko w p�aszczy�nie X i Y)
+				Vector3 direction = (mouseWorldPosition - objectPosition);
+				direction.z = 0; // Upewniamy si�, �e ignorujemy wsp�rz�dn� Z
+				direction.Normalize();
 
-            // Obliczenie k�ta obrotu wzgl�dem osi Z
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+				// Obliczenie k�ta obrotu wzgl�dem osi Z
+				float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            // Instancjonowanie prefaba z rotacj� zgodn� z k�tem
-            GameObject instance = Instantiate(
-                prefab,
-                new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p�aszczy�nie X, Y
-                Quaternion.Euler(0, 0, angle) // Rotacja tylko wok� osi Z
-            );
+				// Instancjonowanie prefaba z rotacj� zgodn� z k�tem
+				GameObject instance = Instantiate(
+					prefab,
+					new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p�aszczy�nie X, Y
+					Quaternion.Euler(0, 0, angle) // Rotacja tylko wok� osi Z
+				);
 
-            // Przekazanie kierunku do prefab movement (tylko X i Y)
-            instance.GetComponent<SodaPrefabMovement>().setDirection(new Vector3(direction.x, direction.y, 0));
+				// Przekazanie kierunku do prefab movement (tylko X i Y)
+				instance.GetComponent<SodaPrefabMovement>().setDirection(new Vector3(direction.x, direction.y, 0));
 
-            // Resetowanie timera
-            currentSpawnTimer = spawnTimer;
-            
-        }
+				// Resetowanie timera
+				currentSpawnTimer = spawnTimer;
+				
+			}
 
-        // Odliczanie czasu do nast�pnego emitowania
-        currentSpawnTimer -= Time.deltaTime;
+			// Odliczanie czasu do nast�pnego emitowania
+			currentSpawnTimer -= Time.deltaTime;
+		}
+
     }
 
 
@@ -112,7 +123,11 @@ public class Soda : MonoBehaviour
 		{
 			timeAtLastShake = Time.time;
 			float value = Mathf.InverseLerp(minDist, maxDist, distance);
-			pressure += addedPressureMultiplier * value;
+			if(!isEmitting)
+			{
+				pressure += addedPressureMultiplier * value;
+			}
+
 			if(pressure > 1.0f)
 			{
 				pressure = 1.0f;
@@ -131,21 +146,33 @@ public class Soda : MonoBehaviour
 
 
 		timeSincePreviousLoss = Time.time - timeAtPreviousLoss;
-		if(timeSincePreviousLoss >= timeBetweenLoss && isPressureFalling == true)
+		if(timeSincePreviousLoss >= timeBetweenLoss && isPressureFalling && !isEmitting)
 		{
 
-			if(pressure >= losingPressureInterval)
-			{
-				pressure -= losingPressureInterval;
-			}
+			pressure -= losingPressureInterval;
+
 			if(pressure < 0.0f)
 			{
 				pressure = 0.0f;
 			}
 
-			//zerujemy zeby znowu minely 2 sekundy przed kolejnym spadkiem pressure
 			timeSincePreviousLoss = 0.0f;
 			timeAtPreviousLoss = Time.time;
+		}
+
+		timeSincePreviousLossEm = Time.time - timeAtPreviousLossEm;
+		if(timeSincePreviousLossEm >= timeBetweenLossEm && isEmitting)
+		{
+
+			pressure -= losingPressureIntervalEm;
+
+			if(pressure < 0.0f)
+			{
+				pressure = 0.0f;
+			}
+
+			timeSincePreviousLossEm = 0.0f;
+			timeAtPreviousLossEm = Time.time;
 		}
 
 		// how long in seconds was the last frame?
