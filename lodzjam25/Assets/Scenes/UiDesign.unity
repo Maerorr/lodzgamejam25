@@ -722,11 +722,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1042017269845024507, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: jumpForce
-      value: 2
+      value: 8.8
       objectReference: {fileID: 0}
     - target: {fileID: 1042017269845024507, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: moveSpeed
-      value: 1.1
+      value: 4.43
       objectReference: {fileID: 0}
     - target: {fileID: 1042017269845024507, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: groundLayer.m_Bits
@@ -779,6 +779,18 @@ PrefabInstance:
     - target: {fileID: 1732512023976608049, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3576634476131632788, guid: c63cacee524a7444585f13035a342faf, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3576634476131632788, guid: c63cacee524a7444585f13035a342faf, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3576634476131632788, guid: c63cacee524a7444585f13035a342faf, type: 3}
+      propertyPath: m_Constraints
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7617039352615937584, guid: c63cacee524a7444585f13035a342faf, type: 3}
       propertyPath: m_Name
