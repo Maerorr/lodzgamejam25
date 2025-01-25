@@ -5,17 +5,24 @@ public class Player : MonoBehaviour
     public float playerHealth = 100f;
     public int lifeCharges = 3;
     private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
+    private Soda soda;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        soda = GetComponent<Soda>();
     }
 
     // Update is called once per frame
     void Update()
     {
         CheckForCheckpoint();
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Pressed left-click.");
+            soda.Emit();
+        }
+
     }
 
     void DecreaseHealth(float damage)
@@ -41,7 +48,6 @@ public class Player : MonoBehaviour
             SetLatestCheckpoint(hit.transform.position);
             if(Vector3.Distance(hit.transform.position, transform.position) <= 10.0f)
             {
-                Debug.Log("here");
                 GetLifeCharges();
             }
         }
