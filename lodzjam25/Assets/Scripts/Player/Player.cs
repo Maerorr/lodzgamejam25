@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public int lifeCharges = 3;
     private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
     private Soda soda;
+    public Rigidbody2D rb;
+    public float knockbackValue;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,7 +23,6 @@ public class Player : MonoBehaviour
             healConsumables.SetAvailableHeals(lifeCharges);
         }
         
-
     }
 
     // Update is called once per frame
@@ -34,7 +35,7 @@ public class Player : MonoBehaviour
         CheckForCheckpoint();
         if (Input.GetMouseButton(0))
         {
-           soda.isEmitting = true;
+            soda.isEmitting = true;
             soda.Emit();
         }
 
@@ -47,6 +48,14 @@ public class Player : MonoBehaviour
         {
            
             UseCharge();
+        }
+
+        if(soda.isKnockback)
+        {
+            //Vector2 buffer = new Vector2(soda.direction.x, soda.direction.y);
+            float value = (soda.direction.y * -1) + 1;
+            rb.AddForce(new Vector2(-soda.direction.x * knockbackValue, value * knockbackValue), ForceMode2D.Force);
+            soda.isKnockback = false;
         }
 
     }

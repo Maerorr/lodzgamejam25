@@ -31,6 +31,10 @@ public class Soda : MonoBehaviour
 
 	public bool isEmitting = false;
 
+	public bool isKnockback;
+
+	public Vector3 direction;
+
     Vector2 ReadMouse()
 	{
 		// this is the ONE place you can change if you wish to get your mouse from somewhere else
@@ -63,7 +67,7 @@ public class Soda : MonoBehaviour
 				Vector3 objectPosition = mainCamera.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y, 0)); 
 
 				// Obliczenie kierunku (z obiektu do myszy, tylko w p�aszczy�nie X i Y)
-				Vector3 direction = (mouseWorldPosition - objectPosition);
+				direction = (mouseWorldPosition - objectPosition);
 				direction.z = 0; // Upewniamy si�, �e ignorujemy wsp�rz�dn� Z
 				direction.Normalize();
 
@@ -82,6 +86,8 @@ public class Soda : MonoBehaviour
 
 				// Resetowanie timera
 				currentSpawnTimer = spawnTimer;
+
+				isKnockback = true;
 				
 			}
 
