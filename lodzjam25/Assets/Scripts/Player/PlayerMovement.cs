@@ -1,69 +1,39 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float jumpForce = 2f;
-    [SerializeField] private float gravityModifier = 5f;
-    float gravity = -9.8f;
-    bool isGrounded;
-    Rigidbody2D rb;
-    InputSystem_Actions inputSystem;
-    Vector2 movementVector;
+    public float moveSpeed = 5f;        // Horizontal movement speed
+    public float jumpForce = 10f;      // Initial velocity for jumping
+    public float gravity = -20f;       // Gravity strength
+    public LayerMask groundLayer;      // Layer used to detect ground
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Rigidbody2D rb;             // Player's rigidbody
+    private Vector2 currentPosition;   // Current position of the player
+    private Vector2 previousPosition;  // Previous position of the player
+    public bool isGrounded;           // Whether the player is grounded
+    public bool isJumping;
+    private CapsuleCollider2D capsuleCollider;
+
+    private void Awake()
     {
-        inputSystem = new InputSystem_Actions();
-        //inputSystem.Player.Enable();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
+        currentPosition = transform.position; // Set the initial position
+        previousPosition = transform.position;
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        Vector3 m_Input = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
-        Vector3 pos = transform.position;
+        float horizontalInput = Input.GetAxis("Horizontal"); // Get the horizontal input
 
-        if(pos.y <= 0.0f)
+        //rb.MovePosition(rb.position + new Vector2(horizontalInput * moveSpeed * Time.deltaTime, 0)); // Move the player horizontally
+        rb.position += new Vector2(horizontalInput * moveSpeed * Time.deltaTime, 0); // Move the player horizontally
+
+        if (Input.GetButtonDown("Jump")) // Check if the player is grounded and the jump button is pressed
         {
-            transform.position = new Vector3(pos.x,0.0f,pos.z);
+            rb.AddForceY(jumpForce, ForceMode2D.Impulse); // Add the jump force
+            isJumping = true;
         }
-
-        rb.MovePosition(transform.position + m_Input * Time.fixedDeltaTime * moveSpeed);
-        //ApplyGravity(, -10.0f, 0.01f);
-        //Move();
-        /*
-        if (inputSystem.Player.Jump.triggered)
-        {
-            Jump();
-        }
-        */
-    }
-
-    private void ApplyGravity(float posY, float acc, float dt)
-    {
-        float prev_posY = posY;
-        float time = 0.0f;
-        float velY = 0.0f;
-
-        while (posY > 0.0f)
-        {
-            time += dt;
-            posY += velY * dt + 0.5f * acc * dt * dt;
-            velY += acc * dt;
-        }
-    }
-
-    private void Move()
-    {
-        movementVector = inputSystem.Player.Move.ReadValue<Vector2>();
-        movementVector.y = 0f;
-        rb.linearVelocity = movementVector * moveSpeed;
-    }
-
-    private void Jump()
-    {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     }
 }
