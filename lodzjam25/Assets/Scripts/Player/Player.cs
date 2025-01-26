@@ -164,8 +164,8 @@ public class Player : MonoBehaviour
     void Die()
     {
         transform.position = respawnPosition;
-        Camera.main.transform.position = Camera.main.GetComponent<level>().cameraPositions[0];
-        Camera.main.GetComponent<level>().currentPositionNr = 0;
+        //Camera.main.transform.position = Camera.main.GetComponent<level>().cameraPositions[0];
+        //Camera.main.GetComponent<level>().currentPositionNr = 0;
         Camera.main.GetComponent<level>().DestroyEnemies();
         playerHealth = 100.0f;
     }

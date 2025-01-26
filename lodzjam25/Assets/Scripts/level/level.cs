@@ -239,7 +239,7 @@ public class level : MonoBehaviour
                     currentPositionNr += 1;
                 }
                 translationVector = cameraPositions[currentPositionNr] - initialPosition;
-
+                player.respawnPosition = playerPositions[currentPositionNr];
                 animating = true;
                 elapsedTime = 0f;
             }
