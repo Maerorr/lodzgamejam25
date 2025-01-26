@@ -79,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && isGrounded) // Check if the player is grounded and the jump button is pressed
         {
+            PlayerAnimator.SetTrigger("JumpTrigger");
             rb.AddForceY(jumpForce, ForceMode2D.Impulse); // Add the jump force
             isJumping = true;
             isGrounded = false;

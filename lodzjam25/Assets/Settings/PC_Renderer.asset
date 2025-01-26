@@ -57,7 +57,7 @@ MonoBehaviour:
     BlitMaterial: {fileID: -876546973899608171, guid: 743e285b251a8bb428846d831ae611d1, type: 3}
     ClearDepth: 0
   MaterialSettings:
-    OutlineScale: 3.5
+    OutlineScale: 2
     RobertsCrossMultiplier: 0
     DepthThreshold: 10
     NormalThreshold: 2
