@@ -27,7 +27,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     Vector3 positionInit;
     public float patrolDistance;
     Vector2 patrolRange;
-
+    Vector3 initialPositionDebil;
     //
     public float timeToRotate;
     float currentTimeToRotate;
@@ -37,7 +37,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     float currentAttackTrigger;
 
     public UnityEvent onDeath = new UnityEvent();
-
+    float damageTime = 0.0f;
     public void attack()
     {
         //Attack
@@ -157,12 +157,13 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
         currentTimeToRotate = timeToRotate;
         currentLifeTimeToDeath = lifeTimeToDeath;
         this.currentBehaviour = new Stay();
+        initialPositionDebil = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        damageTime-=Time.deltaTime;
         currentAttackTrigger -= Time.deltaTime;
         //Debug.Log(attackTrigger);
         if (currentAttackTrigger < 0 && attackTrigger)
@@ -182,8 +183,14 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
         {
             takeDamage = false;
             currentLifeTimeToDeath -= Time.deltaTime;
+            if(damageTime < 0 ){
+                damageTime = 2.0f;
+              //  GetComponent<Punche>().SpawnBillboard(transform.position);
+            }
         }
-        if (transform.position.y < 0) transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        //if (transform.position.y < 0) transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        transform.position = new Vector3(transform.position.x, initialPositionDebil.y, transform.position.z);
+        
         setCurrentState();
         currentBehaviour.execute(this);
     }
