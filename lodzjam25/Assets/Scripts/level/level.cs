@@ -17,6 +17,33 @@ public class level : MonoBehaviour
     private float elapsedTime = 0f;
     private bool animating = false;
 
+    public List<Transform> level1MeleeEnemies = new List<Transform>();
+    public List<Transform> level1RangedEnemies = new List<Transform>();
+
+    public List<Transform> level2MeleeEnemies = new List<Transform>();
+    public List<Transform> level2RangedEnemies = new List<Transform>();
+
+    public List<Transform> level3MeleeEnemies = new List<Transform>();
+    public List<Transform> level3RangedEnemies = new List<Transform>();
+
+    public List<Transform> level4MeleeEnemies = new List<Transform>();
+    public List<Transform> level4RangedEnemies = new List<Transform>();
+
+    public List<Transform> level5MeleeEnemies = new List<Transform>();
+    public List<Transform> level5RangedEnemies = new List<Transform>();
+
+    public List<Transform> level6MeleeEnemies = new List<Transform>();
+    public List<Transform> level6RangedEnemies = new List<Transform>();
+
+    public List<Transform> level7MeleeEnemies = new List<Transform>();
+    public List<Transform> level7RangedEnemies = new List<Transform>();
+
+    public List<Transform> level8MeleeEnemies = new List<Transform>();
+    public List<Transform> level8RangedEnemies = new List<Transform>();
+
+    public GameObject meleeEnemyPrefab;
+    public GameObject rangedEnemyPrefab;
+
     void Start()
     {
         // Zapisz pocz�tkowe ustawienia kamery
@@ -39,7 +66,8 @@ public class level : MonoBehaviour
             if (!animating)
             {
                 initialPosition = cam.transform.position;
-                if(cameraPositions.Count > currentPositionNr+1){
+                if (cameraPositions.Count > currentPositionNr + 1)
+                {
                     currentPositionNr += 1;
                 }
                 translationVector = cameraPositions[currentPositionNr] - initialPosition;
@@ -50,8 +78,9 @@ public class level : MonoBehaviour
         }
 
         if (animating)
-        {   
-            if(cameraPositions.Count > currentPositionNr){
+        {
+            if (cameraPositions.Count > currentPositionNr)
+            {
                 AnimateCamera();
             }
         }
