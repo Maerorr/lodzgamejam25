@@ -42,10 +42,15 @@ public class Bullet : MonoBehaviour
         // Ruch pocisku w kierunku celu
         transform.position = Vector2.MoveTowards(currentPosition, target, speed * Time.deltaTime);
     }
- 
+ public void DestroyMe(){
+		
+		Destroy(gameObject);
+	}  
     void OnTriggerEnter2D(Collider2D collision)
     {
        
+	
+	   
     if  (collision.gameObject.layer == LayerMask.NameToLayer("Ground")|| (collision.gameObject.layer == LayerMask.NameToLayer("Scana")))
 
         {
