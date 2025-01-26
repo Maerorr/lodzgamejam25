@@ -3174,6 +3174,7 @@ GameObject:
   - component: {fileID: 261540267}
   - component: {fileID: 261540266}
   - component: {fileID: 261540270}
+  - component: {fileID: 261540271}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3377,6 +3378,37 @@ MonoBehaviour:
   - {fileID: 321373541}
   meleeEnemyPrefab: {fileID: 3655190404394372071, guid: 4e3d7851e96a3a342adcf36ddc5e049f, type: 3}
   rangedEnemyPrefab: {fileID: 7580173306206356657, guid: e00a95239c4165646aaeb1608ca1553e, type: 3}
+--- !u!114 &261540271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261540265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1089843377
+      Data2: 1264997328
+      Data3: 1036720557
+      Data4: 2132521649
+    Path: event:/MainMusic
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &284746770
 GameObject:
   m_ObjectHideFlags: 0
