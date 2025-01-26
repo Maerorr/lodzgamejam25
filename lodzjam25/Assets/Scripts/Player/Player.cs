@@ -71,16 +71,31 @@ public class Player : MonoBehaviour
 
         //CheckForCheckpoint();
 
+        if (soda.pressure == 0.0f)
+        {
+            soda.isEmitting = false;
+            if (wasEmittingLastFrame)
+            {
+                sprayInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                wasEmittingLastFrame = false;
+            }
+        }
+
         if (Input.GetMouseButton(0))
         {
             if (!wasEmittingLastFrame)
             {
-                sprayInstance.start();
+                if (soda.pressure > 0.0f)
+                {
+                    sprayInstance.start();
+                }
                 wasEmittingLastFrame = true;
             }
             soda.isEmitting = true;
             soda.Emit();
         }
+
+
 
         if (Input.GetMouseButtonUp(0))
         {
