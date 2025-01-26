@@ -4,38 +4,38 @@ public class Bullet : MonoBehaviour
 {
 
     Vector2 target;
-    float speed;
+    public float speed = 0.5f;
     Vector2 direction;
-    public int damage = 10; // Iloœæ zadawanych obra¿eñ
-    public float lifetime; 
-
+    public int damage = 10; // Iloï¿½ï¿½ zadawanych obraï¿½eï¿½
+    public float lifetime=5.0f; 
+    Player player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-    void setTarget(Player player) { target = new Vector2(player.transform.position.x,player.transform.position.y); direction = (target - (Vector2)transform.position).normalized; }
+    public void setTarget(Player player) { target = new Vector2(player.transform.position.x,player.transform.position.y); direction = (target - (Vector2)transform.position).normalized; this.player=player; }
 
     // Update is called once per frame
     void Update()
     {
-        // Aktualizacja czasu ¿ycia
+        // Aktualizacja czasu ï¿½ycia
         lifetime -= Time.deltaTime;
 
-        // Jeœli czas ¿ycia min¹³, zniszcz pocisk
+        // Jeï¿½li czas ï¿½ycia minï¿½ï¿½, zniszcz pocisk
         if (0 > lifetime)
         {
             Destroy(gameObject);
             return;
         }
 
-        // SprawdŸ, czy pocisk dotar³ do celu
+        // Sprawdï¿½, czy pocisk dotarï¿½ do celu
         Vector2 currentPosition = transform.position;
         if (Vector2.Distance(currentPosition, target) <= speed * Time.deltaTime)
         {
             // Ustaw nowy kierunek po dotarciu do celu
-            transform.position = target; // Zapewnia, ¿e cel zosta³ osi¹gniêty
+            transform.position = target; // Zapewnia, ï¿½e cel zostaï¿½ osiï¿½gniï¿½ty
             target += direction; // Kontynuuj lot po tym samym kierunku
         }
 
@@ -43,15 +43,17 @@ public class Bullet : MonoBehaviour
         transform.position = Vector2.MoveTowards(currentPosition, target, speed * Time.deltaTime);
     }
 
-    void OnTriggerEnter(Collider collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        // SprawdŸ, czy pocisk trafi³ w gracza
+        // Sprawdï¿½, czy pocisk trafiï¿½ w gracza
+         Debug.Log("ezreal");
         if (collision.CompareTag("Player"))
         {
+            Debug.Log("Dravem");
             // Pobierz komponent zdrowia gracza
             //collision.GetComponent<Player>().decreaseHealth;
            
-
+            player.DecreaseHealth(damage);
             // Zniszcz pocisk
             Destroy(gameObject);
         }

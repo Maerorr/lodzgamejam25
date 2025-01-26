@@ -17,7 +17,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     public float attentionDistace;
     public Player player;
     public Vector2 direction;
-    float backAttentionMultiply = 0.2f;
+    float backAttentionMultiply = 1.0f;
     public bool isTarczaSzmato = true;
     Vector3 positionInit;
     public float patrolDistance;
@@ -31,6 +31,8 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     bool attackTrigger;
     float currentAttackTrigger;
 
+
+
     public void attack()
     {
        
@@ -43,6 +45,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
 
     public void attackAndMoveForward()
     {
+        /*
         transform.position = new Vector3(transform.position.x + direction.x * speed, transform.position.y, transform.position.z);
         if (player.transform.position.x < transform.position.x)
         {
@@ -52,15 +55,17 @@ public class Enemyrange : MonoBehaviour, EnemyBase
         {
             direction.x = -1.0f;
         }
+        */
     }
 
     public void moveBackward()
     {
-        transform.position = new Vector3(transform.position.x + -direction.x * speed, transform.position.y, transform.position.z);
+        //transform.position = new Vector3(transform.position.x + -direction.x * speed, transform.position.y, transform.position.z);
     }
 
     public void moveForward()
     {
+        /*
         transform.position = new Vector3(transform.position.x + direction.x * speed, transform.position.y, transform.position.z);
         if (player.transform.position.x < transform.position.x)
         {
@@ -70,10 +75,12 @@ public class Enemyrange : MonoBehaviour, EnemyBase
         {
             direction.x = 1.0f;
         }
+        */
     }
 
     public void movePatrol()
     {
+        /*
         if (direction.x > 0)
         {
             if (transform.position.x < patrolRange.y)
@@ -114,6 +121,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
             }
 
         }
+        */
     }
 
 
@@ -127,7 +135,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     void Start()
     {
         positionInit = transform.position;
-        patrolRange = new Vector2(positionInit.x - patrolDistance, positionInit.x + patrolDistance);
+       // patrolRange = new Vector2(positionInit.x - patrolDistance, positionInit.x + patrolDistance);
         direction = new Vector2(1.0f, 0.0f);
         currentTimeToRotate = timeToRotate;
         currentLifeTimeToDeath = lifeTimeToDeath;
@@ -137,28 +145,70 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     // Update is called once per frame
     void Update()
     {
-         transform.position = new Vector3 (transform.position.x,transform.position.y,0);
+        
+    currentAttackTrigger -=Time.deltaTime;
+        Debug.Log(attackTrigger);
+        if(currentAttackTrigger<0 && attackTrigger){
+           
+            attackTrigger = false;
+            
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
+        // Instancjonowanie prefaba z rotacj� zgodn� z k�tem
+        Debug.Log("test rzutu");
+        GameObject instance = Instantiate(
+            prefab,
+            new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p�aszczy�nie X, Y
+            Quaternion.Euler(0, 0, angle) // Rotacja tylko wok� osi Z
+        );
+        instance.GetComponent<Bullet>().setTarget(player);
+        }
+
+
+        if(!sawPlayer){
+        float distance = Vector3.Magnitude(player.transform.position - transform.position);
+
+        if (attentionDistace > distance )
+        {
+       
+            sawPlayer = true;
+            if (transform.position.x > player.transform.position.x)
+            {
+                direction.x = -1.0f;
+            }
+            else
+            {
+                direction.x = 1.0f;
+            }
+
+        }
+        }
+        
+         transform.position =positionInit;
+  
+        Vector3 rotation = transform.eulerAngles;
+        rotation.z = 0.0f;
+        rotation.y = 0.0f;
+        rotation.x = 0.0f;
+        transform.eulerAngles = rotation;
         if (takeDamage)
         {
             takeDamage = false;
             currentLifeTimeToDeath -= Time.deltaTime;
         }
-        if (transform.position.y < 0) transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+       // if (transform.position.y < 0) transform.position = new Vector3(transform.position.x, 0, transform.position.z);
         setCurrentState();
         currentBehaviour.execute(this);
     }
 
     public void distanceAttack()
     {
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        // Instancjonowanie prefaba z rotacj� zgodn� z k�tem
-        GameObject instance = Instantiate(
-            prefab,
-            new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p�aszczy�nie X, Y
-            Quaternion.Euler(0, 0, angle) // Rotacja tylko wok� osi Z
-        );
+        if(!attackTrigger){
+            attackTrigger=true;
+            currentAttackTrigger =attackSpeed;
+        }
+        
     }
 
     public void death()
@@ -176,20 +226,18 @@ public class Enemyrange : MonoBehaviour, EnemyBase
             currentBehaviour = new Death();
             return;
         }
+
         if (sawPlayer)
         {
 
-            Vector3 bufor = new Vector3(this.transform.position.x + direction.x * attackRange, this.transform.position.y, this.transform.position.z);
-            float distance = Vector3.Magnitude(player.transform.position - bufor);
+           
+            float distance = Vector3.Magnitude(player.transform.position - transform.position);
             
             if (attackRange > distance)
             {
                 currentBehaviour = new DistanceAttack();
             }
-            else if (attackRange < distance)
-            {
-                currentBehaviour = new AttackInEscape();
-            }
+            
             else
             {
                 currentBehaviour = new MoveToPlayer();
@@ -198,7 +246,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
         }
         else
         {
-            currentBehaviour = new Patrol();
+            currentBehaviour = new Stay();
 
         }
 

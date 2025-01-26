@@ -27,7 +27,7 @@ public class SodaPrefabMovement : MonoBehaviour
         // Sprawdzamy kolizjê z wszystkimi warstwami oprócz "Player"
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y),
             0.1f,
-             LayerMask.GetMask("Default")
+             LayerMask.GetMask("Ground")
         );
 
         // Jeœli wykryto kolizje
