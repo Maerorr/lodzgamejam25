@@ -10,7 +10,7 @@ public class level : MonoBehaviour
     public float zoomOutDistance = 5f; // O ile oddali� kamer� (dla kamery ortogonalnej zmieniasz orthoSize)
     public float animationDuration = 2f; // Czas trwania animacji w sekundach
 
-    private int currentPositionNr = 0;
+    public int currentPositionNr = 0;
     private Vector3 initialPosition;
     private float initialZoom;
     private Camera cam;
@@ -28,6 +28,7 @@ public class level : MonoBehaviour
             return;
         }
         initialPosition = cam.transform.position;
+        player.respawnPosition = playerPositions[0];
         initialZoom = cam.orthographic ? cam.orthographicSize : cam.fieldOfView;
     }
 

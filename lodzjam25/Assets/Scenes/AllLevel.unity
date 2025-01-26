@@ -2119,6 +2119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyMelle
       objectReference: {fileID: 0}
+    - target: {fileID: 6017433046661371264, guid: 4e3d7851e96a3a342adcf36ddc5e049f, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6536815324167571589, guid: 4e3d7851e96a3a342adcf36ddc5e049f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.75
@@ -3690,6 +3694,7 @@ MonoBehaviour:
   player: {fileID: 2034200778}
   zoomOutDistance: 5
   animationDuration: 2
+  currentPositionNr: 0
 --- !u!1 &284746770
 GameObject:
   m_ObjectHideFlags: 0

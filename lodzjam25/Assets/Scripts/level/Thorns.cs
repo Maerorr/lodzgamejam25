@@ -16,10 +16,10 @@ public class Thorns : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("here");
+        //Debug.Log("here");
         if (collision.gameObject.CompareTag("Player")) 
         {
-            Debug.Log("also");
+            //Debug.Log("also");
             collision.gameObject.GetComponent<Player>().DecreaseHealth(100.0f);
         } 
     }
