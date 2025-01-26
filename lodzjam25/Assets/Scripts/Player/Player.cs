@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     private PlayerMovement pm;
     public Rigidbody2D rb;
     public float knockbackValue;
-    [SerializeField] Vector3 respawnPosition;
+    [SerializeField] public Vector3 respawnPosition;
 
     public bool canBeEmitting = false;
     public bool isFlying = false;
@@ -117,6 +117,8 @@ public class Player : MonoBehaviour
     void Die()
     {
         transform.position = respawnPosition;
+        Camera.main.transform.position = Camera.main.GetComponent<level>().cameraPositions[0];
+        Camera.main.GetComponent<level>().currentPositionNr = 0;
         playerHealth = 100.0f;
     }
 
