@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] float healthDecreaseMultiplier = 1.0f;
 
     public float playerHealth = 100f;
-    
+
     //public int lifeCharges = 3;
     //private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
     private Soda soda;
@@ -18,6 +19,8 @@ public class Player : MonoBehaviour
 
     public bool canBeEmitting = false;
     public bool isFlying = false;
+
+    public UnityEvent onDamage = new UnityEvent();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -38,22 +41,22 @@ public class Player : MonoBehaviour
     {
 
         playerHealth -= healthDecreaseMultiplier * Time.deltaTime;
-        if(playerHealth <= 0.0f)
+        if (playerHealth <= 0.0f)
         {
             Die();
         }
 
-        if(healthBar)
-        {   
-            
-            healthBar.SetCurrentHealth(Mathf.InverseLerp(0f,100f, playerHealth));
+        if (healthBar)
+        {
+
+            healthBar.SetCurrentHealth(Mathf.InverseLerp(0f, 100f, playerHealth));
         }
 
-        if(soda.pressure > 0.0f)
+        if (soda.pressure > 0.0f)
         {
             canBeEmitting = true;
-        } 
-        else 
+        }
+        else
         {
             canBeEmitting = false;
         }
@@ -71,7 +74,7 @@ public class Player : MonoBehaviour
             soda.isEmitting = false;
         }
 
-        if(canBeEmitting && soda.isEmitting && !pm.isGrounded)
+        if (canBeEmitting && soda.isEmitting && !pm.isGrounded)
         {
             isFlying = true;
         }
@@ -88,7 +91,7 @@ public class Player : MonoBehaviour
         }
         */
 
-        if(soda.isKnockback)
+        if (soda.isKnockback)
         {
             //Vector2 buffer = new Vector2(soda.direction.x, soda.direction.y);
             Vector3 direction = soda.direction.normalized;
@@ -111,13 +114,14 @@ public class Player : MonoBehaviour
     public void DecreaseHealth(float damage)
     {
         playerHealth -= damage;
+        onDamage.Invoke();
 
-        if(healthBar)
+        if (healthBar)
         {
             healthBar.SetCurrentHealth(playerHealth);
         }
 
-        if(playerHealth <= 0.0f)
+        if (playerHealth <= 0.0f)
         {
             Die();
         }
