@@ -144,7 +144,7 @@ public class level : MonoBehaviour
     }
 
     void SpawnEnemiesOnLevel()
-    {   
+    {
         Debug.Log("SPAWNING ENEMIES");
         switch (currentPositionNr)
         {
@@ -203,17 +203,19 @@ public class level : MonoBehaviour
     {
         foreach (EnemyMelee enemy in currentMelee)
         {
-            if(enemy != null)
+            if (enemy != null)
             {
                 Destroy(enemy.gameObject);
+                enemiesCount--;
             }
         }
 
         foreach (Enemyrange enemy in currentRange)
         {
-            if(enemy != null)
+            if (enemy != null)
             {
                 Destroy(enemy.gameObject);
+                enemiesCount--;
             }
         }
 
