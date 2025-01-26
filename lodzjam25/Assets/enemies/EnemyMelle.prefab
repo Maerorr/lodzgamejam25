@@ -155,7 +155,7 @@ MonoBehaviour:
   speed: 0.02
   damage: 15
   attackRangeOffset: 0.3
-  attentionDistace: 0.5
+  attentionDistace: 4
   player: {fileID: 0}
   direction: {x: 0, y: 0}
   isTarczaSzmato: 1
