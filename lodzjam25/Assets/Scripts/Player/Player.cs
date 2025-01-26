@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +22,8 @@ public class Player : MonoBehaviour
     public bool isFlying = false;
 
     public UnityEvent onDamage = new UnityEvent();
+
+    public EventReference damageSound;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -97,7 +100,7 @@ public class Player : MonoBehaviour
             Vector3 direction = soda.direction.normalized;
             float value = (direction.y * -1) + 1;
             //Debug.Log(soda.direction);
-            if(pm.isGrounded)
+            if (pm.isGrounded)
             {
                 rb.AddForce(new Vector2(-soda.direction.x * (knockbackValue * 0.1f), value * knockbackValue), ForceMode2D.Force);
             }
@@ -105,7 +108,7 @@ public class Player : MonoBehaviour
             {
                 rb.AddForce(new Vector2(-soda.direction.x * knockbackValue, value * knockbackValue), ForceMode2D.Force);
             }
-            
+
             soda.isKnockback = false;
         }
 
@@ -114,6 +117,7 @@ public class Player : MonoBehaviour
     public void DecreaseHealth(float damage)
     {
         playerHealth -= damage;
+        RuntimeManager.PlayOneShot(damageSound);
         onDamage.Invoke();
 
         if (healthBar)
