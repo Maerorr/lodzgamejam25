@@ -137,6 +137,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     // Update is called once per frame
     void Update()
     {
+         transform.position = new Vector3 (transform.position.x,transform.position.y,0);
 
         if (takeDamage)
         {
@@ -180,6 +181,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
 
             Vector3 bufor = new Vector3(this.transform.position.x + direction.x * attackRange, this.transform.position.y, this.transform.position.z);
             float distance = Vector3.Magnitude(player.transform.position - bufor);
+            
             if (attackRange > distance)
             {
                 currentBehaviour = new DistanceAttack();

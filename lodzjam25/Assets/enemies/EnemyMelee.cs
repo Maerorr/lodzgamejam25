@@ -32,13 +32,18 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     float currentTimeToRotate;
     //
     public LayerMask layerMask; // Zmienna, do kt�rej przypiszesz warstwy w inspektorze
-    bool attackTrigger;
+    bool attackTrigger =false;
     float currentAttackTrigger;
 
     public void attack()
     {
         //Attack
-        Collider2D hitCollider = Physics2D.OverlapCircle(new Vector2(this.transform.position.x + direction.x * 0.5f , this.transform.position.y ), attackRange, LayerMask.GetMask("Player"));
+        if(!attackTrigger){
+        Debug.Log("Kurwa");
+         attackTrigger=true;
+        currentAttackTrigger = attackSpeed;
+        }
+        
     }
 
     public void attackAndMoveBackward()
@@ -51,10 +56,16 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
         transform.position = new Vector3(transform.position.x + direction.x * speed, transform.position.y, transform.position.z);
         if (player.transform.position.x < transform.position.x)
         {
+             if(!attackTrigger){
+            bool attackTrigger=true;
+        currentAttackTrigger = attackSpeed;}
             direction.x = -1.0f;
         }
         else
         {
+             if(!attackTrigger){
+            bool attackTrigger=true;
+        currentAttackTrigger = attackSpeed;}
             direction.x = 1.0f;
         }
     }
@@ -103,8 +114,9 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
                 if (currentTimeToRotate < 0) { direction.x *= -1; currentTimeToRotate = timeToRotate; }
             }
         }
+
         float distance = Vector3.Magnitude(player.transform.position - transform.position);
-        
+       
         if (direction.x * attentionDistace > distance || -direction.x * attentionDistace * backAttentionMultiply > distance)
         {
             
@@ -142,7 +154,21 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     // Update is called once per frame
     void Update()
     {
-
+        
+        currentAttackTrigger -=Time.deltaTime;
+        Debug.Log(attackTrigger);
+        if(currentAttackTrigger<0 && attackTrigger){
+           
+            attackTrigger = false;
+            Collider2D hitCollider = Physics2D.OverlapCircle(new Vector2(this.transform.position.x + direction.x * 0.5f , this.transform.position.y ), attackRange, LayerMask.GetMask("Player"));
+            if(hitCollider != null) player.DecreaseHealth(damage);
+            }
+        transform.position = new Vector3 (transform.position.x,transform.position.y,0);
+        Vector3 rotation = transform.eulerAngles;
+        rotation.z = 0.0f;
+        rotation.y = 0.0f;
+        rotation.x = 0.0f;
+        transform.eulerAngles = rotation;
         if (takeDamage)
         {
             takeDamage = false;
@@ -177,9 +203,11 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
         {
             
             Vector3 bufor = new Vector3(this.transform.position.x + direction.x * attackRange, this.transform.position.y,this.transform.position.z);
+          
             float distance = Vector3.Magnitude(player.transform.position - bufor);
             if (attackRange > distance)
             {
+                
                 currentBehaviour = new Attack();
             }
             else if (attackRange + attackRangeOffset > distance)
