@@ -2,7 +2,6 @@ using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class EnemyMelee : MonoBehaviour, EnemyBase
 {
@@ -32,7 +31,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     public float timeToRotate;
     float currentTimeToRotate;
     //
-    public LayerMask layerMask; // Zmienna, do której przypiszesz warstwy w inspektorze
+    public LayerMask layerMask; // Zmienna, do ktï¿½rej przypiszesz warstwy w inspektorze
     bool attackTrigger;
     float currentAttackTrigger;
 
