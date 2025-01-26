@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class Enemyrange : MonoBehaviour, EnemyBase
 {
@@ -31,11 +32,11 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     bool attackTrigger;
     float currentAttackTrigger;
 
-
+    public UnityEvent onDeath = new UnityEvent();
 
     public void attack()
     {
-       
+
     }
 
     public void attackAndMoveBackward()
@@ -135,7 +136,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     void Start()
     {
         positionInit = transform.position;
-       // patrolRange = new Vector2(positionInit.x - patrolDistance, positionInit.x + patrolDistance);
+        // patrolRange = new Vector2(positionInit.x - patrolDistance, positionInit.x + patrolDistance);
         direction = new Vector2(1.0f, 0.0f);
         currentTimeToRotate = timeToRotate;
         currentLifeTimeToDeath = lifeTimeToDeath;
@@ -145,47 +146,49 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     // Update is called once per frame
     void Update()
     {
-        
-    currentAttackTrigger -=Time.deltaTime;
+
+        currentAttackTrigger -= Time.deltaTime;
         Debug.Log(attackTrigger);
-        if(currentAttackTrigger<0 && attackTrigger){
-           
-            attackTrigger = false;
-            
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        // Instancjonowanie prefaba z rotacj� zgodn� z k�tem
-        Debug.Log("test rzutu");
-        GameObject instance = Instantiate(
-            prefab,
-            new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p�aszczy�nie X, Y
-            Quaternion.Euler(0, 0, angle) // Rotacja tylko wok� osi Z
-        );
-        instance.GetComponent<Bullet>().setTarget(player);
-        }
-
-
-        if(!sawPlayer){
-        float distance = Vector3.Magnitude(player.transform.position - transform.position);
-
-        if (attentionDistace > distance )
+        if (currentAttackTrigger < 0 && attackTrigger)
         {
-       
-            sawPlayer = true;
-            if (transform.position.x > player.transform.position.x)
-            {
-                direction.x = -1.0f;
-            }
-            else
-            {
-                direction.x = 1.0f;
-            }
 
+            attackTrigger = false;
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            // Instancjonowanie prefaba z rotacj� zgodn� z k�tem
+            Debug.Log("test rzutu");
+            GameObject instance = Instantiate(
+                prefab,
+                new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p�aszczy�nie X, Y
+                Quaternion.Euler(0, 0, angle) // Rotacja tylko wok� osi Z
+            );
+            instance.GetComponent<Bullet>().setTarget(player);
         }
+
+
+        if (!sawPlayer)
+        {
+            float distance = Vector3.Magnitude(player.transform.position - transform.position);
+
+            if (attentionDistace > distance)
+            {
+
+                sawPlayer = true;
+                if (transform.position.x > player.transform.position.x)
+                {
+                    direction.x = -1.0f;
+                }
+                else
+                {
+                    direction.x = 1.0f;
+                }
+
+            }
         }
-        
-         transform.position =positionInit;
-  
+
+        transform.position = positionInit;
+
         Vector3 rotation = transform.eulerAngles;
         rotation.z = 0.0f;
         rotation.y = 0.0f;
@@ -196,7 +199,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
             takeDamage = false;
             currentLifeTimeToDeath -= Time.deltaTime;
         }
-       // if (transform.position.y < 0) transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        // if (transform.position.y < 0) transform.position = new Vector3(transform.position.x, 0, transform.position.z);
         setCurrentState();
         currentBehaviour.execute(this);
     }
@@ -204,16 +207,17 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     public void distanceAttack()
     {
 
-        if(!attackTrigger){
-            attackTrigger=true;
-            currentAttackTrigger =attackSpeed;
+        if (!attackTrigger)
+        {
+            attackTrigger = true;
+            currentAttackTrigger = attackSpeed;
         }
-        
+
     }
 
     public void death()
     {
-
+        onDeath.Invoke();
         Destroy(gameObject);
 
     }
@@ -230,14 +234,14 @@ public class Enemyrange : MonoBehaviour, EnemyBase
         if (sawPlayer)
         {
 
-           
+
             float distance = Vector3.Magnitude(player.transform.position - transform.position);
-            
+
             if (attackRange > distance)
             {
                 currentBehaviour = new DistanceAttack();
             }
-            
+
             else
             {
                 currentBehaviour = new MoveToPlayer();

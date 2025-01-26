@@ -44,6 +44,8 @@ public class level : MonoBehaviour
     public GameObject meleeEnemyPrefab;
     public GameObject rangedEnemyPrefab;
 
+    int enemiesCount = 0;
+
     void Start()
     {
         // Zapisz pocz�tkowe ustawienia kamery
@@ -57,6 +59,7 @@ public class level : MonoBehaviour
         initialPosition = cam.transform.position;
         player.respawnPosition = playerPositions[0];
         initialZoom = cam.orthographic ? cam.orthographicSize : cam.fieldOfView;
+        SpawnEnemiesOnLevel();
     }
 
     void Update()
@@ -132,6 +135,82 @@ public class level : MonoBehaviour
             else
             {
                 cam.fieldOfView = initialZoom;
+            }
+            SpawnEnemiesOnLevel();
+        }
+    }
+
+    void SpawnEnemiesOnLevel()
+    {   
+        Debug.Log("SPAWNING ENEMIES");
+        switch (currentPositionNr)
+        {
+            case 0:
+                SpawnEnemies(level1MeleeEnemies, level1RangedEnemies);
+                break;
+            case 1:
+                SpawnEnemies(level2MeleeEnemies, level2RangedEnemies);
+                break;
+            case 2:
+                SpawnEnemies(level3MeleeEnemies, level3RangedEnemies);
+                break;
+            case 3:
+                SpawnEnemies(level4MeleeEnemies, level4RangedEnemies);
+                break;
+            case 4:
+                SpawnEnemies(level5MeleeEnemies, level5RangedEnemies);
+                break;
+            case 5:
+                SpawnEnemies(level6MeleeEnemies, level6RangedEnemies);
+                break;
+            case 6:
+                SpawnEnemies(level7MeleeEnemies, level7RangedEnemies);
+                break;
+            case 7:
+                SpawnEnemies(level8MeleeEnemies, level8RangedEnemies);
+                break;
+        }
+    }
+
+    void SpawnEnemies(List<Transform> meleeEnemies, List<Transform> rangedEnemies)
+    {
+        Player player = FindFirstObjectByType<Player>();
+        foreach (Transform enemy in meleeEnemies)
+        {
+            var e = Instantiate(meleeEnemyPrefab, enemy.position, enemy.rotation);
+            enemiesCount++;
+            EnemyMelee enemyMelee = e.GetComponent<EnemyMelee>();
+            enemyMelee.player = player;
+            enemyMelee.onDeath.AddListener(DecreaseEnemiesCount);
+        }
+
+        foreach (Transform enemy in rangedEnemies)
+        {
+            var e = Instantiate(rangedEnemyPrefab, enemy.position, enemy.rotation);
+            enemiesCount++;
+            Enemyrange enemyRange = e.GetComponent<Enemyrange>();
+            enemyRange.player = player;
+            enemyRange.onDeath.AddListener(DecreaseEnemiesCount);
+        }
+    }
+
+    void DecreaseEnemiesCount()
+    {
+        enemiesCount--;
+        Debug.Log("Enemies Left: " + enemiesCount);
+        if (enemiesCount == 0)
+        {
+            if (!animating)
+            {
+                initialPosition = cam.transform.position;
+                if (cameraPositions.Count > currentPositionNr + 1)
+                {
+                    currentPositionNr += 1;
+                }
+                translationVector = cameraPositions[currentPositionNr] - initialPosition;
+
+                animating = true;
+                elapsedTime = 0f;
             }
         }
     }
