@@ -152,18 +152,21 @@ MonoBehaviour:
   basicLifeTime: 0.45
   lifeTimeToDeath: 0.24
   currentLifeTimeToDeath: 0
-  attackRange: 3.35
-  attackSpeed: 1.71
-  speed: 1.59
-  damage: 2.28
-  attackRangeOffset: 0.86
-  attentionDistace: 3.65
+  attackRange: 9
+  attackSpeed: 1
+  speed: 0
+  damage: 15
+  attackRangeOffset: 1
+  attentionDistace: 9
   player: {fileID: 0}
   direction: {x: 0, y: 0}
   isTarczaSzmato: 0
-  patrolDistance: 1.89
-  prefab: {fileID: 0}
+  patrolDistance: 0
+  prefab: {fileID: 1242866698261525431, guid: d6f2d1127b8fba742ba2677e4565e092, type: 3}
   timeToRotate: 0
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []

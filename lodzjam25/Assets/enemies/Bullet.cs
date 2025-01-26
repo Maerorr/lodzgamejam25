@@ -7,15 +7,15 @@ public class Bullet : MonoBehaviour
     public float speed = 0.5f;
     Vector2 direction;
     public int damage = 10; // Ilo�� zadawanych obra�e�
-    public float lifetime=5.0f; 
+    public float lifetime = 5.0f;
     Player player;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
-    public void setTarget(Player player) { target = new Vector2(player.transform.position.x,player.transform.position.y); direction = (target - (Vector2)transform.position).normalized; this.player=player; }
+    public void setTarget(Player player) { target = new Vector2(player.transform.position.x, player.transform.position.y); direction = (target - (Vector2)transform.position).normalized; this.player = player; }
 
     // Update is called once per frame
     void Update()
@@ -46,13 +46,13 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         // Sprawd�, czy pocisk trafi� w gracza
-         Debug.Log("ezreal");
+        Debug.Log("ezreal");
         if (collision.CompareTag("Player"))
         {
             Debug.Log("Dravem");
             // Pobierz komponent zdrowia gracza
             //collision.GetComponent<Player>().decreaseHealth;
-           
+
             player.DecreaseHealth(damage);
             // Zniszcz pocisk
             Destroy(gameObject);
