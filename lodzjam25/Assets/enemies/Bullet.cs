@@ -42,11 +42,21 @@ public class Bullet : MonoBehaviour
         // Ruch pocisku w kierunku celu
         transform.position = Vector2.MoveTowards(currentPosition, target, speed * Time.deltaTime);
     }
-
+ 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // Sprawd�, czy pocisk trafi� w gracza
+       
+    if  (collision.gameObject.layer == LayerMask.NameToLayer("Ground")|| (collision.gameObject.layer == LayerMask.NameToLayer("Scana")))
+
+        {
+           
+
+            // Zniszcz pocisk
+            Destroy(gameObject);
+        }
         
+        // Sprawd�, czy pocisk trafi� w gracza
+  
         if (collision.CompareTag("Player"))
         {
            
@@ -59,3 +69,8 @@ public class Bullet : MonoBehaviour
         }
     }
 }
+
+
+
+
+

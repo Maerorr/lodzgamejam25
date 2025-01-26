@@ -85,7 +85,11 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
 
     public void moveForward()
     {
-        transform.position = new Vector3(transform.position.x + direction.x * speed, transform.position.y, transform.position.z);
+		Vector3 newPos = new Vector3(transform.position.x + direction.x * speed, transform.position.y, transform.position.z);
+		Collider2D hitCollider = Physics2D.OverlapCircle(new Vector2(newPos.x + direction.x * 0.5f, newPos.y), attackRange, LayerMask.GetMask("Scana"));
+        
+        if(hitCollider == null){
+		transform.position =newPos;
         if (player.transform.position.x < transform.position.x)
         {
             direction.x = -1.0f;
@@ -93,7 +97,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
         else
         {
             direction.x = 1.0f;
-        }
+        }}
     }
 
     public void movePatrol()
