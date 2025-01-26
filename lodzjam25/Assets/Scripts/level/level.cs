@@ -80,13 +80,13 @@ public class level : MonoBehaviour
         {
             DestroyEnemies();
             NextLevel(true);
-            player.Renew();
+            //player.Renew();
         }
         if (Input.GetKeyDown(KeyCode.I))
         {
             DestroyEnemies();
             Restart(true);
-            player.Renew();
+            //player.Renew();
         }
     }
 
@@ -149,6 +149,7 @@ public class level : MonoBehaviour
                     cam.fieldOfView = initialZoom;
                 }
                 SpawnEnemiesOnLevel();
+                player.Renew();
             });
         });
 
