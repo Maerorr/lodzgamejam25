@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 2717355580431653330}
   - component: {fileID: 8507970563857276253}
   - component: {fileID: 6017433046661371264}
+  - component: {fileID: 4578217952488611133}
   m_Layer: 0
   m_Name: EnemyMelle
   m_TagString: Untagged
@@ -162,6 +163,9 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!23 &2632111270783840925
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -263,6 +267,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4578217952488611133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3655190404394372071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f61635a3563d40b42aacb0745e46f9b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textures: []
+  billboardPrefab: {fileID: 4567495320432126973, guid: 7435ebd7e2ecdc9408cb330b0c038668, type: 3}
+  billboardLifetime: 0.6
+  initialScale: {x: 0.1, y: 0.1, z: 0.1}
+  finalScale: {x: 5, y: 5, z: 5}
+  minX: -1
+  maxX: 1
+  minY: 1
+  maxY: 2
+  material: {fileID: 2100000, guid: a919ff18b5f250844b6ab6a526774991, type: 2}
 --- !u!1 &5617562941245755965
 GameObject:
   m_ObjectHideFlags: 0

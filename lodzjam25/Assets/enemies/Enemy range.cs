@@ -34,6 +34,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
 
     public UnityEvent onDeath = new UnityEvent();
 
+    float damageTime = 0.0f;
     public void attack()
     {
 
@@ -146,7 +147,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     // Update is called once per frame
     void Update()
     {
-
+        damageTime-=Time.deltaTime;
         currentAttackTrigger -= Time.deltaTime;
         Debug.Log(attackTrigger);
         if (currentAttackTrigger < 0 && attackTrigger)
@@ -157,12 +158,13 @@ public class Enemyrange : MonoBehaviour, EnemyBase
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             // Instancjonowanie prefaba z rotacj� zgodn� z k�tem
-            Debug.Log("test rzutu");
+     
             GameObject instance = Instantiate(
                 prefab,
-                new Vector3(transform.position.x, transform.position.y - 0.1f, 0), // Pozycja startowa w p�aszczy�nie X, Y
+                positionInit, // Pozycja startowa w p�aszczy�nie X, Y
                 Quaternion.Euler(0, 0, angle) // Rotacja tylko wok� osi Z
             );
+           
             instance.GetComponent<Bullet>().setTarget(player);
         }
 
@@ -211,6 +213,10 @@ public class Enemyrange : MonoBehaviour, EnemyBase
         {
             attackTrigger = true;
             currentAttackTrigger = attackSpeed;
+            if(damageTime < 0 ){
+                damageTime = 2.0f;
+             //   GetComponent<Punche>().SpawnBillboard(transform.position);
+            }
         }
 
     }
