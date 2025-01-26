@@ -154,9 +154,9 @@ MonoBehaviour:
   lifeTimeToDeath: 0.24
   currentLifeTimeToDeath: 0
   attackRange: 9
-  attackSpeed: 1
+  attackSpeed: 2
   speed: 0
-  damage: 15
+  damage: 7
   attackRangeOffset: 1
   attentionDistace: 9
   player: {fileID: 0}

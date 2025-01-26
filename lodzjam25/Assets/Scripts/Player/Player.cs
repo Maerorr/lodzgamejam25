@@ -173,6 +173,7 @@ public class Player : MonoBehaviour
         //Camera.main.transform.position = Camera.main.GetComponent<level>().cameraPositions[0];
         //Camera.main.GetComponent<level>().currentPositionNr = 0;
         Camera.main.GetComponent<level>().DestroyEnemies(true);
+        soda.pressure = 1.0f;
         playerHealth = 100.0f;
     }
 
