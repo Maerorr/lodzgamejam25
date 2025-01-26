@@ -1,4 +1,7 @@
+using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
@@ -7,7 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] float healthDecreaseMultiplier = 1.0f;
 
     public float playerHealth = 100f;
-    
+
     //public int lifeCharges = 3;
     //private Vector3 latestCheckpoint = new Vector3(0.0f,0.0f,0.0f);
     private Soda soda;
@@ -19,12 +22,20 @@ public class Player : MonoBehaviour
     public bool canBeEmitting = false;
     public bool isFlying = false;
 
+    public UnityEvent onDamage = new UnityEvent();
+
+    public EventReference damageSound;
+
+    bool wasEmittingLastFrame = false;
+    public EventReference spraySound;
+    EventInstance sprayInstance;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         soda = GetComponent<Soda>();
         pm = GetComponent<PlayerMovement>();
-
+        sprayInstance = RuntimeManager.CreateInstance(spraySound);
         /*
         if(healConsumables)
         {
@@ -38,22 +49,22 @@ public class Player : MonoBehaviour
     {
 
         playerHealth -= healthDecreaseMultiplier * Time.deltaTime;
-        if(playerHealth <= 0.0f)
+        if (playerHealth <= 0.0f)
         {
             Die();
         }
 
-        if(healthBar)
-        {   
-            
-            healthBar.SetCurrentHealth(Mathf.InverseLerp(0f,100f, playerHealth));
+        if (healthBar)
+        {
+
+            healthBar.SetCurrentHealth(Mathf.InverseLerp(0f, 100f, playerHealth));
         }
 
-        if(soda.pressure > 0.0f)
+        if (soda.pressure > 0.0f)
         {
             canBeEmitting = true;
-        } 
-        else 
+        }
+        else
         {
             canBeEmitting = false;
         }
@@ -62,6 +73,11 @@ public class Player : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
+            if (!wasEmittingLastFrame)
+            {
+                sprayInstance.start();
+                wasEmittingLastFrame = true;
+            }
             soda.isEmitting = true;
             soda.Emit();
         }
@@ -69,9 +85,14 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             soda.isEmitting = false;
+            if (wasEmittingLastFrame)
+            {
+                sprayInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                wasEmittingLastFrame = false;
+            }
         }
 
-        if(canBeEmitting && soda.isEmitting && !pm.isGrounded)
+        if (canBeEmitting && soda.isEmitting && !pm.isGrounded)
         {
             isFlying = true;
         }
@@ -88,13 +109,13 @@ public class Player : MonoBehaviour
         }
         */
 
-        if(soda.isKnockback)
+        if (soda.isKnockback)
         {
             //Vector2 buffer = new Vector2(soda.direction.x, soda.direction.y);
             Vector3 direction = soda.direction.normalized;
             float value = (direction.y * -1) + 1;
             //Debug.Log(soda.direction);
-            if(pm.isGrounded)
+            if (pm.isGrounded)
             {
                 rb.AddForce(new Vector2(-soda.direction.x * (knockbackValue * 0.1f), value * knockbackValue), ForceMode2D.Force);
             }
@@ -102,7 +123,7 @@ public class Player : MonoBehaviour
             {
                 rb.AddForce(new Vector2(-soda.direction.x * knockbackValue, value * knockbackValue), ForceMode2D.Force);
             }
-            
+
             soda.isKnockback = false;
         }
 
@@ -111,13 +132,15 @@ public class Player : MonoBehaviour
     public void DecreaseHealth(float damage)
     {
         playerHealth -= damage;
+        RuntimeManager.PlayOneShot(damageSound);
+        onDamage.Invoke();
 
-        if(healthBar)
+        if (healthBar)
         {
             healthBar.SetCurrentHealth(playerHealth);
         }
 
-        if(playerHealth <= 0.0f)
+        if (playerHealth <= 0.0f)
         {
             Die();
         }
@@ -128,6 +151,7 @@ public class Player : MonoBehaviour
         transform.position = respawnPosition;
         Camera.main.transform.position = Camera.main.GetComponent<level>().cameraPositions[0];
         Camera.main.GetComponent<level>().currentPositionNr = 0;
+        Camera.main.GetComponent<level>().DestroyEnemies();
         playerHealth = 100.0f;
     }
 
