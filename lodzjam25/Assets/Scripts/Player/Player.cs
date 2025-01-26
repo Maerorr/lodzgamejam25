@@ -92,6 +92,7 @@ public class Player : MonoBehaviour
         {
             //Vector2 buffer = new Vector2(soda.direction.x, soda.direction.y);
             float value = (soda.direction.y * -1) + 1;
+            //Debug.Log(soda.direction);
             rb.AddForce(new Vector2(-soda.direction.x * knockbackValue, value * knockbackValue), ForceMode2D.Force);
             soda.isKnockback = false;
         }

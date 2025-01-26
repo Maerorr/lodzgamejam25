@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal"); // Get the horizontal input
-        Debug.Log(horizontalInput);
+        //Debug.Log(horizontalInput);
     
         if (horizontalInput!=0)
         {

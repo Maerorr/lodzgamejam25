@@ -1,11 +1,16 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class level : MonoBehaviour
 {
-    public Vector3 translationVector = new Vector3(1f, 1f, 0f); // Wektor przesuniêcia
-    public float zoomOutDistance = 5f; // O ile oddaliæ kamerê (dla kamery ortogonalnej zmieniasz orthoSize)
+    public Vector3 translationVector = new Vector3(1f, 1f, 0f); // Wektor przesuniï¿½cia
+    public List<Vector3> cameraPositions = new List<Vector3>();
+    public List<Vector3> playerPositions = new List<Vector3>();
+    [SerializeField] Player player;
+    public float zoomOutDistance = 5f; // O ile oddaliï¿½ kamerï¿½ (dla kamery ortogonalnej zmieniasz orthoSize)
     public float animationDuration = 2f; // Czas trwania animacji w sekundach
 
+    private int currentPositionNr = 0;
     private Vector3 initialPosition;
     private float initialZoom;
     private Camera cam;
@@ -14,11 +19,11 @@ public class level : MonoBehaviour
 
     void Start()
     {
-        // Zapisz pocz¹tkowe ustawienia kamery
+        // Zapisz poczï¿½tkowe ustawienia kamery
         cam = GetComponent<Camera>();
         if (cam == null)
         {
-            Debug.LogError("Ten skrypt musi byæ przypisany do obiektu z kamer¹!");
+            Debug.LogError("Ten skrypt musi byï¿½ przypisany do obiektu z kamerï¿½!");
             enabled = false;
             return;
         }
@@ -28,18 +33,26 @@ public class level : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) // Rozpocznij animacjê po naciœniêciu Spacji
+        if (Input.GetKeyDown(KeyCode.E)) // Rozpocznij animacjï¿½ po naciï¿½niï¿½ciu Spacji
         {
             if (!animating)
             {
+                initialPosition = cam.transform.position;
+                if(cameraPositions.Count > currentPositionNr+1){
+                    currentPositionNr += 1;
+                }
+                translationVector = cameraPositions[currentPositionNr] - initialPosition;
+
                 animating = true;
                 elapsedTime = 0f;
             }
         }
 
         if (animating)
-        {
-            AnimateCamera();
+        {   
+            if(cameraPositions.Count > currentPositionNr){
+                AnimateCamera();
+            }
         }
     }
 
@@ -48,7 +61,7 @@ public class level : MonoBehaviour
         elapsedTime += Time.deltaTime;
         float t = elapsedTime / animationDuration;
 
-        if (t <= 0.5f) // Pierwsza po³owa animacji: oddalanie i przesuwanie
+        if (t <= 0.5f) // Pierwsza poï¿½owa animacji: oddalanie i przesuwanie
         {
             float progress = t * 2f; // Skaluje czas do zakresu [0, 1] w tej fazie
             cam.transform.position = Vector3.Lerp(initialPosition, initialPosition + translationVector, progress);
@@ -62,10 +75,10 @@ public class level : MonoBehaviour
                 cam.fieldOfView = Mathf.Lerp(initialZoom, initialZoom + zoomOutDistance, progress);
             }
         }
-        else if (t <= 1f) // Druga po³owa animacji: powrót
+        else if (t <= 1f) // Druga poï¿½owa animacji: powrï¿½t
         {
             float progress = (t - 0.5f) * 2f; // Skaluje czas do zakresu [0, 1] w tej fazie
-            cam.transform.position = Vector3.Lerp(initialPosition + translationVector, initialPosition, progress);
+            cam.transform.position = Vector3.Lerp(initialPosition + translationVector, initialPosition + translationVector, progress);
 
             if (cam.orthographic)
             {
@@ -78,9 +91,10 @@ public class level : MonoBehaviour
         }
         else
         {
-            // Zakoñcz animacjê
+            // Zakoï¿½cz animacjï¿½
+            player.transform.position = playerPositions[currentPositionNr];
             animating = false;
-            cam.transform.position = initialPosition;
+            cam.transform.position = initialPosition + translationVector;
             if (cam.orthographic)
             {
                 cam.orthographicSize = initialZoom;
