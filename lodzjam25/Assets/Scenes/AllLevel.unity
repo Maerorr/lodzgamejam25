@@ -23875,9 +23875,17 @@ PrefabInstance:
       value: PlayerGracz
       objectReference: {fileID: 0}
     - target: {fileID: 2324761875374375983, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: minDist
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2324761875374375983, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
       propertyPath: trzepoMeter
       value: 
       objectReference: {fileID: 1465962064}
+    - target: {fileID: 2324761875374375983, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: addedPressureMultiplier
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 2955026504976198575, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
       propertyPath: healthBar
       value: 

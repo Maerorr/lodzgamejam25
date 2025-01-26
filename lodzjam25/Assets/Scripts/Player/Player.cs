@@ -147,6 +147,7 @@ public class Player : MonoBehaviour
     public void Reset()
     {
         playerHealth = 100.0f;
+        soda.pressure = 1.0f;
         transform.position = respawnPosition;
     }
 
@@ -173,6 +174,12 @@ public class Player : MonoBehaviour
         //Camera.main.transform.position = Camera.main.GetComponent<level>().cameraPositions[0];
         //Camera.main.GetComponent<level>().currentPositionNr = 0;
         Camera.main.GetComponent<level>().DestroyEnemies(true);
+        soda.pressure = 1.0f;
+        playerHealth = 100.0f;
+    }
+
+    public void Renew()
+    {
         soda.pressure = 1.0f;
         playerHealth = 100.0f;
     }
