@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,12 +26,16 @@ public class Player : MonoBehaviour
 
     public EventReference damageSound;
 
+    bool wasEmittingLastFrame = false;
+    public EventReference spraySound;
+    EventInstance sprayInstance;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         soda = GetComponent<Soda>();
         pm = GetComponent<PlayerMovement>();
-
+        sprayInstance = RuntimeManager.CreateInstance(spraySound);
         /*
         if(healConsumables)
         {
@@ -68,6 +73,11 @@ public class Player : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
+            if (!wasEmittingLastFrame)
+            {
+                sprayInstance.start();
+                wasEmittingLastFrame = true;
+            }
             soda.isEmitting = true;
             soda.Emit();
         }
@@ -75,6 +85,11 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             soda.isEmitting = false;
+            if (wasEmittingLastFrame)
+            {
+                sprayInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                wasEmittingLastFrame = false;
+            }
         }
 
         if (canBeEmitting && soda.isEmitting && !pm.isGrounded)
