@@ -43,7 +43,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
         //Attack
         if (!attackTrigger)
         {
-            Debug.Log("Kurwa");
+           
             attackTrigger = true;
             currentAttackTrigger = attackSpeed;
         }
@@ -165,7 +165,7 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
     {
         damageTime-=Time.deltaTime;
         currentAttackTrigger -= Time.deltaTime;
-        //Debug.Log(attackTrigger);
+        
         if (currentAttackTrigger < 0 && attackTrigger)
         {
 
@@ -225,10 +225,10 @@ public class EnemyMelee : MonoBehaviour, EnemyBase
 
                 currentBehaviour = new Attack();
             }
-            else if (attackRange + attackRangeOffset > distance)
-            {
-                currentBehaviour = new AttackInForwardMovement();
-            }
+           // else if (attackRange + attackRangeOffset > distance)
+           // {
+           //     currentBehaviour = new AttackInForwardMovement();
+           // }
             else
             {
                 currentBehaviour = new MoveToPlayer();
