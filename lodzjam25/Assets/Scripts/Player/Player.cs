@@ -91,9 +91,18 @@ public class Player : MonoBehaviour
         if(soda.isKnockback)
         {
             //Vector2 buffer = new Vector2(soda.direction.x, soda.direction.y);
-            float value = (soda.direction.y * -1) + 1;
+            Vector3 direction = soda.direction.normalized;
+            float value = (direction.y * -1) + 1;
             //Debug.Log(soda.direction);
-            rb.AddForce(new Vector2(-soda.direction.x * knockbackValue, value * knockbackValue), ForceMode2D.Force);
+            if(pm.isGrounded)
+            {
+                rb.AddForce(new Vector2(-soda.direction.x * (knockbackValue * 0.1f), value * knockbackValue), ForceMode2D.Force);
+            }
+            else
+            {
+                rb.AddForce(new Vector2(-soda.direction.x * knockbackValue, value * knockbackValue), ForceMode2D.Force);
+            }
+            
             soda.isKnockback = false;
         }
 
