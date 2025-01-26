@@ -3950,6 +3950,7 @@ MonoBehaviour:
   level8RangedEnemies:
   - {fileID: 1469398488}
   - {fileID: 1450192345}
+  - {fileID: 2091339962}
   meleeEnemyPrefab: {fileID: 3655190404394372071, guid: 4e3d7851e96a3a342adcf36ddc5e049f, type: 3}
   rangedEnemyPrefab: {fileID: 7580173306206356657, guid: e00a95239c4165646aaeb1608ca1553e, type: 3}
   currentMelee: []
