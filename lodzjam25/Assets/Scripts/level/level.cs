@@ -70,32 +70,20 @@ public class level : MonoBehaviour
 
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.E)) // Rozpocznij animacj� po naci�ni�ciu Spacji
-        // {
-        //     if (!animating)
-        //     {
-        //         initialPosition = cam.transform.position;
-        //         if (cameraPositions.Count > currentPositionNr + 1)
-        //         {
-        //             currentPositionNr += 1;
-        //         }
-        //         translationVector = cameraPositions[currentPositionNr] - initialPosition;
-
-        //         animating = true;
-        //         elapsedTime = 0f;
-        //     }
-        // }
-
-        // if (animating)
-        // {
-        //     if (cameraPositions.Count > currentPositionNr)
-        //     {
-        //         AnimateCamera();
-        //     }
-        // }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            DestroyEnemies();
+            SpawnEnemiesOnLevel();
+            player.Reset();
+        }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            DestroyEnemies();
+            NextLevel(true);
+        }
     }
 
-    public void NextLevel()
+    public void NextLevel(bool skipWait = false)
     {
         initialPosition = cam.transform.position;
         if (cameraPositions.Count > currentPositionNr + 1)
@@ -108,15 +96,15 @@ public class level : MonoBehaviour
         animating = true;
         elapsedTime = 0f;
 
-        AnimateCamera();
+        AnimateCamera(skipWait);
     }
 
-    void AnimateCamera()
+    void AnimateCamera(bool skipWait = false)
     {
         elapsedTime += Time.deltaTime;
         float t = elapsedTime / animationDuration;
 
-        DOTween.To(() => 0f, x => dontdeletethispls = x, 1f, 2.0f).OnComplete(() =>
+        DOTween.To(() => 0f, x => dontdeletethispls = x, skipWait ? 0f : 1f, 2.0f).OnComplete(() =>
         {
             cam.DOOrthoSize(initialZoom + zoomOutDistance, 1.0f).OnComplete(() =>
             {
@@ -225,6 +213,7 @@ public class level : MonoBehaviour
 
     void SpawnEnemies(List<Transform> meleeEnemies, List<Transform> rangedEnemies)
     {
+        enemiesCount = 0;
         Player player = FindFirstObjectByType<Player>();
         foreach (Transform enemy in meleeEnemies)
         {
@@ -247,7 +236,7 @@ public class level : MonoBehaviour
         }
     }
 
-    public void DestroyEnemies()
+    public void DestroyEnemies(bool shouldSpawn = false)
     {
         foreach (EnemyMelee enemy in currentMelee)
         {
@@ -270,7 +259,10 @@ public class level : MonoBehaviour
         currentMelee.Clear();
         currentRange.Clear();
 
-        SpawnEnemiesOnLevel();
+        if (shouldSpawn)
+        {
+            SpawnEnemiesOnLevel();
+        }
     }
 
     void DecreaseEnemiesCount()

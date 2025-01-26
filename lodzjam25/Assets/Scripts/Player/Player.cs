@@ -144,6 +144,12 @@ public class Player : MonoBehaviour
 
     }
 
+    public void Reset()
+    {
+        playerHealth = 100.0f;
+        transform.position = respawnPosition;
+    }
+
     public void DecreaseHealth(float damage)
     {
         playerHealth -= damage;
@@ -166,7 +172,7 @@ public class Player : MonoBehaviour
         transform.position = respawnPosition;
         //Camera.main.transform.position = Camera.main.GetComponent<level>().cameraPositions[0];
         //Camera.main.GetComponent<level>().currentPositionNr = 0;
-        Camera.main.GetComponent<level>().DestroyEnemies();
+        Camera.main.GetComponent<level>().DestroyEnemies(true);
         playerHealth = 100.0f;
     }
 
