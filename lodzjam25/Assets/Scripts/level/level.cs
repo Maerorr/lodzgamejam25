@@ -44,6 +44,9 @@ public class level : MonoBehaviour
     public GameObject meleeEnemyPrefab;
     public GameObject rangedEnemyPrefab;
 
+    public List<EnemyMelee> currentMelee = new List<EnemyMelee>();
+    public List<Enemyrange> currentRange = new List<Enemyrange>();
+
     int enemiesCount = 0;
 
     void Start()
@@ -182,6 +185,7 @@ public class level : MonoBehaviour
             EnemyMelee enemyMelee = e.GetComponent<EnemyMelee>();
             enemyMelee.player = player;
             enemyMelee.onDeath.AddListener(DecreaseEnemiesCount);
+            currentMelee.Add(enemyMelee);
         }
 
         foreach (Transform enemy in rangedEnemies)
@@ -191,7 +195,32 @@ public class level : MonoBehaviour
             Enemyrange enemyRange = e.GetComponent<Enemyrange>();
             enemyRange.player = player;
             enemyRange.onDeath.AddListener(DecreaseEnemiesCount);
+            currentRange.Add(enemyRange);
         }
+    }
+
+    public void DestroyEnemies()
+    {
+        foreach (EnemyMelee enemy in currentMelee)
+        {
+            if(enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+
+        foreach (Enemyrange enemy in currentRange)
+        {
+            if(enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+
+        currentMelee.Clear();
+        currentRange.Clear();
+
+        SpawnEnemiesOnLevel();
     }
 
     void DecreaseEnemiesCount()

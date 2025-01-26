@@ -46,10 +46,10 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         // Sprawd�, czy pocisk trafi� w gracza
-        Debug.Log("ezreal");
+        
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("Dravem");
+           
             // Pobierz komponent zdrowia gracza
             //collision.GetComponent<Player>().decreaseHealth;
 

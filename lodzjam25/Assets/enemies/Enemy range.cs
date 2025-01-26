@@ -149,7 +149,7 @@ public class Enemyrange : MonoBehaviour, EnemyBase
     {
         damageTime-=Time.deltaTime;
         currentAttackTrigger -= Time.deltaTime;
-        Debug.Log(attackTrigger);
+        
         if (currentAttackTrigger < 0 && attackTrigger)
         {
 

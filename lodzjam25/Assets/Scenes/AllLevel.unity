@@ -3174,6 +3174,7 @@ GameObject:
   - component: {fileID: 261540267}
   - component: {fileID: 261540266}
   - component: {fileID: 261540270}
+  - component: {fileID: 261540271}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3377,6 +3378,37 @@ MonoBehaviour:
   - {fileID: 321373541}
   meleeEnemyPrefab: {fileID: 3655190404394372071, guid: 4e3d7851e96a3a342adcf36ddc5e049f, type: 3}
   rangedEnemyPrefab: {fileID: 7580173306206356657, guid: e00a95239c4165646aaeb1608ca1553e, type: 3}
+--- !u!114 &261540271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261540265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1089843377
+      Data2: 1264997328
+      Data3: 1036720557
+      Data4: 2132521649
+    Path: event:/MainMusic
+  Event: 
+  EventPlayTrigger: 1
+  EventStopTrigger: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &284746770
 GameObject:
   m_ObjectHideFlags: 0
@@ -18990,6 +19022,7 @@ GameObject:
   - component: {fileID: 1685175285}
   - component: {fileID: 1685175287}
   - component: {fileID: 1685175286}
+  - component: {fileID: 1685175288}
   m_Layer: 5
   m_Name: Overlay
   m_TagString: Untagged
@@ -19036,7 +19069,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9d6a9e36c118a6d489132fdbfff03570, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 22ad112f1dac41c47817deabe6fe9ce2, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -19054,6 +19087,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1685175284}
   m_CullTransparentMesh: 1
+--- !u!114 &1685175288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685175284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a470025739ee3c94fa788f605aab962e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlay: {fileID: 1685175286}
 --- !u!1 &1698965852
 GameObject:
   m_ObjectHideFlags: 0
@@ -22830,6 +22876,66 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 794959678}
+    - target: {fileID: 2955026504976198575, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: damageSound.Path
+      value: event:/PlayerMeleeDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2955026504976198575, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: damageSound.Guid.Data1
+      value: 1336243322
+      objectReference: {fileID: 0}
+    - target: {fileID: 2955026504976198575, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: damageSound.Guid.Data2
+      value: 1339334404
+      objectReference: {fileID: 0}
+    - target: {fileID: 2955026504976198575, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: damageSound.Guid.Data3
+      value: -1093834600
+      objectReference: {fileID: 0}
+    - target: {fileID: 2955026504976198575, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: damageSound.Guid.Data4
+      value: -1217988851
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: jumpSound.Path
+      value: event:/PlayerJump
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: stepsSound.Path
+      value: event:/PlayerSteps
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: jumpSound.Guid.Data1
+      value: -523777138
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: jumpSound.Guid.Data2
+      value: 1273538660
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: jumpSound.Guid.Data3
+      value: -1973244527
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: jumpSound.Guid.Data4
+      value: -779115932
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: stepsSound.Guid.Data1
+      value: 1570801935
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: stepsSound.Guid.Data2
+      value: 1213455352
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: stepsSound.Guid.Data3
+      value: 1297222309
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424476937228153783, guid: c591f406f475b9043859a3a6eca5ece5, type: 3}
+      propertyPath: stepsSound.Guid.Data4
+      value: 173628559
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

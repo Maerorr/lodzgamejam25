@@ -1,4 +1,6 @@
+using System.Collections;
 using DG.Tweening;
+using FMODUnity;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -17,6 +19,13 @@ public class PlayerMovement : MonoBehaviour
     public bool isJumping;
     private CapsuleCollider2D capsuleCollider;
 
+
+    bool wasMovingLastFrame = false;
+    public EventReference stepsSound;
+    public EventReference jumpSound;
+
+    Coroutine stepsRoutine;
+
     private void Awake()
     {
         capsuleCollider = GetComponent<CapsuleCollider2D>();
@@ -29,8 +38,25 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal"); // Get the horizontal input
         //Debug.Log(horizontalInput);
-    
-        if (horizontalInput!=0)
+        if (horizontalInput != 0)
+        {
+            if (wasMovingLastFrame == false)
+            {
+                wasMovingLastFrame = true;
+                stepsRoutine = StartCoroutine(StepSoundRoutine());
+            }
+        }
+        else
+        {
+            if (wasMovingLastFrame)
+            {
+                StopCoroutine(stepsRoutine);
+                wasMovingLastFrame = false;
+            }
+            wasMovingLastFrame = false;
+        }
+
+        if (horizontalInput != 0)
         {
             PlayerAnimator.SetTrigger("RunAnimTrigger");
             PlayerAnimator.SetBool("RunAnimBool", true);
@@ -41,8 +67,6 @@ public class PlayerMovement : MonoBehaviour
             PlayerAnimator.SetBool("RunAnimBool", false);
 
         }
-
-        
 
         if (cursorIK.isFacingLeft)
         {
@@ -63,15 +87,15 @@ public class PlayerMovement : MonoBehaviour
             PlayerAnimator.SetBool("isGrounded", false);
 
         }
-        
+
         //rb.MovePosition(rb.position + new Vector2(horizontalInput * moveSpeed * Time.deltaTime, 0)); // Move the player horizontally
         rb.position += new Vector2(horizontalInput * moveSpeed * Time.deltaTime, 0); // Move the player horizontally
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, 1.3f, LayerMask.GetMask("Ground"));
-        if(hit)
+        if (hit)
         {
             isGrounded = true;
-        } 
+        }
         else
         {
             isGrounded = false;
@@ -83,6 +107,21 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForceY(jumpForce, ForceMode2D.Impulse); // Add the jump force
             isJumping = true;
             isGrounded = false;
+            RuntimeManager.PlayOneShot(jumpSound);
         }
+    }
+
+    IEnumerator StepSoundRoutine()
+    {
+        while (true)
+        {
+            if (isGrounded)
+            {
+                RuntimeManager.PlayOneShot(stepsSound, transform.position);
+            }
+
+            yield return new WaitForSeconds(0.5f);
+        }
+
     }
 }
