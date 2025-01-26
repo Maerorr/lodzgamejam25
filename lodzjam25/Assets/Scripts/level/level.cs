@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class level : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class level : MonoBehaviour
 
     int enemiesCount = 0;
 
+    float dontdeletethispls = 0;
+
     void Start()
     {
         // Zapisz pocz�tkowe ustawienia kamery
@@ -67,29 +70,45 @@ public class level : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) // Rozpocznij animacj� po naci�ni�ciu Spacji
-        {
-            if (!animating)
-            {
-                initialPosition = cam.transform.position;
-                if (cameraPositions.Count > currentPositionNr + 1)
-                {
-                    currentPositionNr += 1;
-                }
-                translationVector = cameraPositions[currentPositionNr] - initialPosition;
+        // if (Input.GetKeyDown(KeyCode.E)) // Rozpocznij animacj� po naci�ni�ciu Spacji
+        // {
+        //     if (!animating)
+        //     {
+        //         initialPosition = cam.transform.position;
+        //         if (cameraPositions.Count > currentPositionNr + 1)
+        //         {
+        //             currentPositionNr += 1;
+        //         }
+        //         translationVector = cameraPositions[currentPositionNr] - initialPosition;
 
-                animating = true;
-                elapsedTime = 0f;
-            }
-        }
+        //         animating = true;
+        //         elapsedTime = 0f;
+        //     }
+        // }
 
-        if (animating)
+        // if (animating)
+        // {
+        //     if (cameraPositions.Count > currentPositionNr)
+        //     {
+        //         AnimateCamera();
+        //     }
+        // }
+    }
+
+    public void NextLevel()
+    {
+        initialPosition = cam.transform.position;
+        if (cameraPositions.Count > currentPositionNr + 1)
         {
-            if (cameraPositions.Count > currentPositionNr)
-            {
-                AnimateCamera();
-            }
+            currentPositionNr += 1;
         }
+        translationVector = cameraPositions[currentPositionNr] - initialPosition;
+
+        player.respawnPosition = playerPositions[currentPositionNr];
+        animating = true;
+        elapsedTime = 0f;
+
+        AnimateCamera();
     }
 
     void AnimateCamera()
@@ -97,50 +116,79 @@ public class level : MonoBehaviour
         elapsedTime += Time.deltaTime;
         float t = elapsedTime / animationDuration;
 
-        if (t <= 0.5f) // Pierwsza po�owa animacji: oddalanie i przesuwanie
+        DOTween.To(() => 0f, x => dontdeletethispls = x, 1f, 2.0f).OnComplete(() =>
         {
-            float progress = t * 2f; // Skaluje czas do zakresu [0, 1] w tej fazie
-            cam.transform.position = Vector3.Lerp(initialPosition, initialPosition + translationVector, progress);
+            cam.DOOrthoSize(initialZoom + zoomOutDistance, 1.0f).OnComplete(() =>
+            {
+                cam.DOOrthoSize(initialZoom, 1.0f);
+            });
+            cam.DOFieldOfView(initialZoom + zoomOutDistance, 1.0f).OnComplete(() =>
+            {
+                cam.DOFieldOfView(initialZoom, 1.0f);
+            });
 
-            if (cam.orthographic)
+            cam.transform.DOMove(cameraPositions[currentPositionNr], 2.0f).OnComplete(() =>
             {
-                cam.orthographicSize = Mathf.Lerp(initialZoom, initialZoom + zoomOutDistance, progress);
-            }
-            else
-            {
-                cam.fieldOfView = Mathf.Lerp(initialZoom, initialZoom + zoomOutDistance, progress);
-            }
-        }
-        else if (t <= 1f) // Druga po�owa animacji: powr�t
-        {
-            float progress = (t - 0.5f) * 2f; // Skaluje czas do zakresu [0, 1] w tej fazie
-            cam.transform.position = Vector3.Lerp(initialPosition + translationVector, initialPosition + translationVector, progress);
+                player.transform.position = playerPositions[currentPositionNr];
+                animating = false;
+                cam.transform.position = initialPosition + translationVector;
+                if (cam.orthographic)
+                {
+                    cam.orthographicSize = initialZoom;
+                }
+                else
+                {
+                    cam.fieldOfView = initialZoom;
+                }
+                SpawnEnemiesOnLevel();
+            });
+        });
 
-            if (cam.orthographic)
-            {
-                cam.orthographicSize = Mathf.Lerp(initialZoom + zoomOutDistance, initialZoom, progress);
-            }
-            else
-            {
-                cam.fieldOfView = Mathf.Lerp(initialZoom + zoomOutDistance, initialZoom, progress);
-            }
-        }
-        else
-        {
-            // Zako�cz animacj�
-            player.transform.position = playerPositions[currentPositionNr];
-            animating = false;
-            cam.transform.position = initialPosition + translationVector;
-            if (cam.orthographic)
-            {
-                cam.orthographicSize = initialZoom;
-            }
-            else
-            {
-                cam.fieldOfView = initialZoom;
-            }
-            SpawnEnemiesOnLevel();
-        }
+
+        // if (t <= 0.5f) // Pierwsza po�owa animacji: oddalanie i przesuwanie
+        // {
+        //     float progress = t * 2f; // Skaluje czas do zakresu [0, 1] w tej fazie
+        //     cam.transform.position = Vector3.Lerp(initialPosition, initialPosition + translationVector, progress);
+
+        //     if (cam.orthographic)
+        //     {
+        //         cam.orthographicSize = Mathf.Lerp(initialZoom, initialZoom + zoomOutDistance, progress);
+        //     }
+        //     else
+        //     {
+        //         cam.fieldOfView = Mathf.Lerp(initialZoom, initialZoom + zoomOutDistance, progress);
+        //     }
+        // }
+        // else if (t <= 1f) // Druga po�owa animacji: powr�t
+        // {
+        //     float progress = (t - 0.5f) * 2f; // Skaluje czas do zakresu [0, 1] w tej fazie
+        //     cam.transform.position = Vector3.Lerp(initialPosition + translationVector, initialPosition + translationVector, progress);
+
+        //     if (cam.orthographic)
+        //     {
+        //         cam.orthographicSize = Mathf.Lerp(initialZoom + zoomOutDistance, initialZoom, progress);
+        //     }
+        //     else
+        //     {
+        //         cam.fieldOfView = Mathf.Lerp(initialZoom + zoomOutDistance, initialZoom, progress);
+        //     }
+        // }
+        // else
+        // {
+        //     // Zako�cz animacj�
+        //     player.transform.position = playerPositions[currentPositionNr];
+        //     animating = false;
+        //     cam.transform.position = initialPosition + translationVector;
+        //     if (cam.orthographic)
+        //     {
+        //         cam.orthographicSize = initialZoom;
+        //     }
+        //     else
+        //     {
+        //         cam.fieldOfView = initialZoom;
+        //     }
+        //     SpawnEnemiesOnLevel();
+        // }
     }
 
     void SpawnEnemiesOnLevel()
@@ -231,18 +279,19 @@ public class level : MonoBehaviour
         Debug.Log("Enemies Left: " + enemiesCount);
         if (enemiesCount == 0)
         {
-            if (!animating)
-            {
-                initialPosition = cam.transform.position;
-                if (cameraPositions.Count > currentPositionNr + 1)
-                {
-                    currentPositionNr += 1;
-                }
-                translationVector = cameraPositions[currentPositionNr] - initialPosition;
-                player.respawnPosition = playerPositions[currentPositionNr];
-                animating = true;
-                elapsedTime = 0f;
-            }
+            // if (!animating)
+            // {
+            //     initialPosition = cam.transform.position;
+            //     if (cameraPositions.Count > currentPositionNr + 1)
+            //     {
+            //         currentPositionNr += 1;
+            //     }
+            //     translationVector = cameraPositions[currentPositionNr] - initialPosition;
+            //     player.respawnPosition = playerPositions[currentPositionNr];
+            //     animating = true;
+            //     elapsedTime = 0f;
+            // }
+            NextLevel();
         }
     }
 }
